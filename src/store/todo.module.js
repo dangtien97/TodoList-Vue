@@ -27,30 +27,30 @@ export const todo = {
         .catch((e) => commit("set_error", e))
         .finally(() => commit("set_end_request"));
     },
-    async addTodo({ commit }, todo) {
+    addTodo({ commit }, todo) {
       commit("set_pending");
-      await UserService.addTodoAPI(todo)
+      UserService.addTodoAPI(todo)
         .then((todo) => commit("add_todo", todo))
         .catch((e) => commit("set_error", e))
         .finally(() => commit("set_end_request"));
     },
-    async deleteTodo({ commit }, id) {
+    deleteTodo({ commit }, id) {
       commit("set_pending");
-      await UserService.deleteTodoAPI(id)
+      UserService.deleteTodoAPI(id)
         .then(() => commit("delete_todo", id))
         .catch((e) => commit("set_error", e))
         .finally(() => commit("set_end_request"));
     },
-    async updateTodo({ commit }, todo) {
+    updateTodo({ commit }, todo) {
       commit("set_pending");
-      await UserService.updateTodoAPI(todo)
+      UserService.updateTodoAPI(todo)
         .then((todo) => commit("update_todo", todo))
         .catch((e) => commit("set_error", e))
         .finally(() => commit("set_end_request"));
     },
-    async statusTodo({ commit }, todo) {
+    statusTodo({ commit }, todo) {
       commit("set_pending");
-      await UserService.updateTodoAPI(todo)
+      UserService.updateTodoAPI(todo)
         .then((todo) => commit("status_todo", todo))
         .catch((e) => commit("set_error", e))
         .finally(() => commit("set_end_request"));
