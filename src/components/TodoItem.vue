@@ -5,11 +5,9 @@
         v-if="!editing"
         class="row justify-content-between align-items-center title"
         :class="todo.status === 'completed' ? 'completed' : ''"
+        :title="'Created: ' + created + '\nUpdated: ' + todo.updated_at"
       >
-        <span
-          class="content"
-          :title="'Created: ' + created + '\nUpdated: ' + todo.updated_at"
-        >
+        <span class="content">
           {{ todo.content }}
         </span>
         <input
