@@ -7,7 +7,7 @@ export const todo = {
     error: null,
     data: [],
     search: "",
-    selectTodoToEdit: "",
+    selectTodoToEdit: null,
   },
   getters: {
     allTodos: (state) => state.data,
@@ -87,7 +87,7 @@ export const todo = {
     update_todo(state, todoEdited) {
       let index = state.data.findIndex((todo) => todo.id === todoEdited.id);
       state.data.splice(index, 1, todoEdited);
-      state.selectTodoToEdit = "";
+      state.selectTodoToEdit = null;
     },
     status_todo(state, todo) {
       let index = state.data.findIndex((item) => item.id === todo.id);
@@ -97,7 +97,11 @@ export const todo = {
       state.search = searchText;
     },
     select_to_edit(state, id) {
-      state.selectTodoToEdit = id;
+      if (id) {
+        state.selectTodoToEdit = id;
+      } else {
+        state.selectTodoToEdit = null;
+      }
     },
 
     clear_todo(state) {

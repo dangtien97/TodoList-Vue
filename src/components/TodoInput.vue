@@ -43,7 +43,7 @@ export default {
     ...mapGetters("todo", ["loading", "error"]),
   },
   methods: {
-    ...mapActions("todo", ["addTodo", "searchTodo"]),
+    ...mapActions("todo", ["addTodo", "searchTodo", "selectToEdit"]),
     showAlert() {
       this.$swal.fire({
         position: "top-end",
@@ -54,6 +54,7 @@ export default {
       });
     },
     handleAdd() {
+      this.selectToEdit(null);
       this.addTodo({
         content: this.todoText,
       });

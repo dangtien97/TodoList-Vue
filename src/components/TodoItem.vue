@@ -90,6 +90,7 @@ export default {
     handleDelete(todo) {
       if (this.editing) {
         this.editing = !this.editing;
+        this.editText = this.todo.content;
       } else {
         this.$swal
           .fire({

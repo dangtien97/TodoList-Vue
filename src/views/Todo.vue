@@ -2,7 +2,7 @@
   <div>
     <h1 class="m-5 text-center">Hello {{ currentUser.username }}!</h1>
     <div
-      class="row mt-4 mb-2 justify-content-center align-items-center align-items-center"
+      class="listDetail row mt-4 mb-2 justify-content-center align-items-center align-items-center"
     >
       <p class="detail all">All: {{ allTodos.length }} tasks</p>
       <p class="detail todo-done">Done: {{ todosDone.length }}</p>
@@ -73,5 +73,10 @@ export default {
 .detail.error {
   color: red;
   background-color: rgba(255, 255, 0, 0.5);
+}
+
+.listDetail.row {
+  margin-left: 0;
+  margin-right: 0;
 }
 </style>
