@@ -1,12 +1,17 @@
 <template>
   <div class="row my-4 justify-content-center align-items-center">
-    <div class="col-4 item mx-2">
+    <div class="col-7 col-lg-4 item mx-2">
       <div
         v-if="!editing"
         class="row justify-content-between align-items-center title"
         :class="todo.status === 'completed' ? 'completed' : ''"
       >
-        <span> {{ todo.content }} </span>
+        <span
+          class="content"
+          :title="'Created: ' + created + '\nUpdated: ' + todo.updated_at"
+        >
+          {{ todo.content }}
+        </span>
         <input
           type="checkbox"
           @click="handleStatus(todo)"
@@ -19,17 +24,23 @@
     <button
       @click="handleEdit(todo)"
       class="btn btn-success"
-      :disabled="todo.status === 'completed' || loading || error"
+      :disabled="
+        todo.status === 'completed' ||
+          loading ||
+          error ||
+          (editing && !editText)
+      "
     >
       {{ editing ? "Update" : "Edit" }}
     </button>
     <button
-      @click="deleteTodo(todo.id)"
+      @click="handleDelete(todo)"
       class="btn btn-danger ml-1"
       :disabled="loading || error"
     >
-      Delete
+      {{ editing ? "Cancel" : " Delete" }}
     </button>
+    {{ edit }}
   </div>
 </template>
 
@@ -39,31 +50,33 @@ export default {
   name: "TodoItem",
   props: {
     todo: {},
+    editing: Boolean,
   },
   data: function() {
     return {
-      editText: "",
-      editing: false,
+      editText: this.todo.content,
+      created: this.todo.created_at,
     };
   },
   computed: {
-    ...mapGetters("todo", ["allTodos", "loading", "error"]),
+    ...mapGetters("todo", ["loading", "error"]),
   },
   methods: {
-    ...mapActions("todo", ["deleteTodo", "updateTodo", "statusTodo"]),
+    ...mapActions("todo", [
+      "deleteTodo",
+      "updateTodo",
+      "statusTodo",
+      "selectToEdit",
+    ]),
     handleEdit(todo) {
       if (this.editing) {
-        if (this.editText) {
-          this.updateTodo({
-            id: todo.id,
-            content: this.editText,
-            status: "active",
-          });
-        } else {
-          this.deleteTodo(todo.id);
-        }
+        this.updateTodo({
+          id: todo.id,
+          content: this.editText,
+          status: "active",
+        });
       } else {
-        this.editText = todo.title;
+        this.selectToEdit(todo.id);
       }
       this.editing = !this.editing;
     },
@@ -73,6 +86,24 @@ export default {
         content: todo.content,
         status: todo.status === "active" ? "completed" : "active",
       });
+    },
+    handleDelete(todo) {
+      if (this.editing) {
+        this.editing = !this.editing;
+      } else {
+        this.$swal
+          .fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+          })
+          .then(async (result) => {
+            if (result.isConfirmed) {
+              this.deleteTodo(todo.id);
+            }
+          });
+      }
     },
   },
 };
@@ -93,5 +124,8 @@ export default {
 .completed {
   text-decoration: line-through;
   color: grey;
+}
+.content {
+  max-width: 70%;
 }
 </style>

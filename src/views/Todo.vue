@@ -4,7 +4,7 @@
     <div
       class="row mt-4 mb-2 justify-content-center align-items-center align-items-center"
     >
-      <p class="detail all">You have {{ allTodos.length }} tasks</p>
+      <p class="detail all">All: {{ allTodos.length }} tasks</p>
       <p class="detail todo-done">Done: {{ todosDone.length }}</p>
     </div>
     <div
@@ -14,8 +14,13 @@
     </div>
     <todo-input />
     <div>
-      <div class="todo-item" v-for="todo in allTodos" :key="todo.id">
-        <todo-item :todo="todo" />
+      <div class="todo-item" v-for="todo in searchFilter" :key="todo.id">
+        <todo-item
+          :todo="todo"
+          :editing="
+            todo.id === $store.state.todo.selectTodoToEdit ? true : false
+          "
+        />
       </div>
     </div>
   </div>
@@ -30,7 +35,7 @@ export default {
   components: { TodoInput, TodoItem },
   name: "Todo",
   computed: {
-    ...mapGetters("todo", ["allTodos", "todosDone", "error"]),
+    ...mapGetters("todo", ["searchFilter", "allTodos", "todosDone", "error"]),
     currentUser() {
       return this.$store.state.auth.user;
     },
