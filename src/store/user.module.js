@@ -47,24 +47,24 @@ export const user = {
     },
   },
   mutations: {
-    SET_LOGIN_SUCCESS(state, user) {
+    [SET_LOGIN_SUCCESS](state, user) {
       state.status.isUserLoggedIn = true;
       state.user = user;
     },
-    SET_LOGIN_FAILURE(state) {
+    [SET_LOGIN_FAILURE](state) {
       state.status.isUserLoggedIn = false;
       state.user = null;
     },
 
-    SET_LOGOUT(state) {
+    [SET_LOGOUT](state) {
       state.status.isUserLoggedIn = false;
       state.user = null;
     },
 
-    SET_REGISTER_SUCCESS(state) {
+    [SET_REGISTER_SUCCESS](state) {
       state.status.isUserLoggedIn = false;
     },
-    SET_REGISTER_FAILURE(state) {
+    [SET_REGISTER_FAILURE](state) {
       state.status.isUserLoggedIn = false;
     },
   },

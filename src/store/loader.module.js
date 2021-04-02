@@ -28,17 +28,17 @@ export const loader = {
     },
   },
   mutations: {
-    SET_SEND_REQUEST(state) {
+    [SET_SEND_REQUEST](state) {
       state.isLoading = true;
     },
-    SET_ERROR_REQUEST(state, error) {
+    [SET_ERROR_REQUEST](state, error) {
       state.error = error;
       state.isLoading = false;
     },
-    SET_END_REQUEST(state) {
+    [SET_END_REQUEST](state) {
       state.isLoading = false;
     },
-    CLEAR_ERROR_REQUEST(state) {
+    [CLEAR_ERROR_REQUEST](state) {
       state.error = null;
     },
   },

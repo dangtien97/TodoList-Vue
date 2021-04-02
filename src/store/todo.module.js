@@ -59,38 +59,38 @@ export const todo = {
     },
   },
   mutations: {
-    SET_TODOS(state, { todos, rootState }) {
+    [SET_TODOS](state, { todos, rootState }) {
       rootState.todo.data = todos;
     },
-    ADD_TODO(state, todo) {
+    [ADD_TODO](state, todo) {
       if (todo.content) {
         state.data.push(todo);
       }
     },
-    DELETE_TODO(state, id) {
+    [DELETE_TODO](state, id) {
       let index = state.data.findIndex((todo) => todo.id === id);
       state.data.splice(index, 1);
     },
-    UPDATE_TODO(state, todoEdited) {
+    [UPDATE_TODO](state, todoEdited) {
       let index = state.data.findIndex((todo) => todo.id === todoEdited.id);
       state.data.splice(index, 1, todoEdited);
       state.selectTodoToEdit = null;
     },
-    UPDATE_STATUS_TODO(state, todo) {
+    [UPDATE_STATUS_TODO](state, todo) {
       let index = state.data.findIndex((item) => item.id === todo.id);
       state.data.splice(index, 1, todo);
     },
-    SET_SEARCH_TODO(state, searchText) {
+    [SET_SEARCH_TODO](state, searchText) {
       state.search = searchText;
     },
-    SET_SELECTED_TODO(state, id) {
+    [SET_SELECTED_TODO](state, id) {
       if (id) {
         state.selectTodoToEdit = id;
       } else {
         state.selectTodoToEdit = null;
       }
     },
-    CLEAR_TODOS(state) {
+    [CLEAR_TODOS](state) {
       state.data.splice(0);
       state.error = null;
     },
