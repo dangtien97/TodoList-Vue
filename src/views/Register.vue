@@ -59,13 +59,14 @@
 </template>
 
 <script>
-import User from "../models/user";
-
 export default {
   name: "Register",
   data() {
     return {
-      user: new User("", ""),
+      user: {
+        username: "",
+        password: "",
+      },
       submitted: false,
       successful: false,
       message: "",
@@ -94,7 +95,10 @@ export default {
               this.$router.push("/login");
             },
             (error) => {
-              this.message = error.response.data.message;
+              this.message =
+                (error.response && error.response.data.message) ||
+                error.message ||
+                error.toString();
               this.successful = false;
             }
           );

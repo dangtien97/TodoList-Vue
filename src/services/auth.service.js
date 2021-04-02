@@ -1,32 +1,33 @@
-import axios from "axios";
+import axios from "@/lib/axios/axios";
 
-const API_URL = "https://todo-mvc-api-typeorm.herokuapp.com/auth/";
+const AUTH_PATH = "/auth/";
 
-class AuthService {
-  login(user) {
-    return axios
-      .post(API_URL + "login", {
-        username: user.username,
-        password: user.password,
-      })
-      .then((res) => {
-        if (res.data.token) {
-          localStorage.setItem("user", JSON.stringify(res.data));
-        }
-        return res.data;
-      });
+async function login(user) {
+  const response = await axios.post(AUTH_PATH + "login", {
+    username: user.username,
+    password: user.password,
+  });
+  if (response.data.token) {
+    localStorage.setItem("user", JSON.stringify(response.data));
   }
-
-  logout() {
-    localStorage.removeItem("user");
-  }
-
-  register(user) {
-    return axios.post(API_URL + "register", {
-      username: user.username,
-      password: user.password,
-    });
-  }
+  return response.data;
 }
 
-export default new AuthService();
+function logout() {
+  localStorage.removeItem("user");
+}
+
+async function register(user) {
+  return await axios.post(AUTH_PATH + "register", {
+    username: user.username,
+    password: user.password,
+  });
+}
+
+const AuthService = {
+  login,
+  logout,
+  register,
+};
+
+export default AuthService;

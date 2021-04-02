@@ -62,13 +62,14 @@
 </template>
 
 <script>
-import User from "../models/user";
-
 export default {
   name: "Login",
   data() {
     return {
-      user: new User("", ""),
+      user: {
+        username: "",
+        password: "",
+      },
       loading: false,
       message: "",
     };
@@ -94,11 +95,15 @@ export default {
         if (this.user.username && this.user.password) {
           this.$store.dispatch("auth/login", this.user).then(
             () => {
+              this.$store.dispatch("loader/clearError");
               this.$router.push("/todo");
             },
             (error) => {
               this.loading = false;
-              this.message = error.response.data.message;
+              this.message =
+                (error.response && error.response.data.message) ||
+                error.message ||
+                error.toString();
             }
           );
         }

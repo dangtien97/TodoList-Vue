@@ -35,7 +35,8 @@ export default {
   components: { TodoInput, TodoItem },
   name: "Todo",
   computed: {
-    ...mapGetters("todo", ["searchFilter", "allTodos", "todosDone", "error"]),
+    ...mapGetters("todo", ["searchFilter", "allTodos", "todosDone"]),
+    ...mapGetters("loader", ["error"]),
     currentUser() {
       return this.$store.state.auth.user;
     },

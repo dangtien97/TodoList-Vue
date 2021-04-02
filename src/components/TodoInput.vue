@@ -40,7 +40,8 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("todo", ["loading", "error"]),
+    ...mapGetters("loader", ["loading", "error"]),
+   
   },
   methods: {
     ...mapActions("todo", ["addTodo", "searchTodo", "selectToEdit"]),

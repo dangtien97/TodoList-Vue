@@ -38,7 +38,6 @@
     >
       {{ editing ? "Cancel" : " Delete" }}
     </button>
-    {{ edit }}
   </div>
 </template>
 
@@ -57,7 +56,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("todo", ["loading", "error"]),
+    ...mapGetters("loader", ["loading", "error"]),
   },
   methods: {
     ...mapActions("todo", [
@@ -68,13 +67,16 @@ export default {
     ]),
     handleEdit(todo) {
       if (this.editing) {
+        // update
         this.updateTodo({
           id: todo.id,
           content: this.editText,
           status: "active",
         });
       } else {
+        // select todo to edit
         this.selectToEdit(todo.id);
+        this.editText = this.todo.content;
       }
       this.editing = !this.editing;
     },
@@ -87,9 +89,12 @@ export default {
     },
     handleDelete(todo) {
       if (this.editing) {
-        this.editing = !this.editing;
+        // cancel edit
+        this.editing = false;
         this.editText = this.todo.content;
+        this.selectToEdit(null);
       } else {
+        // delete
         this.$swal
           .fire({
             title: "Are you sure?",
