@@ -2,7 +2,7 @@
   <div class="row my-4 justify-content-center align-items-center">
     <div class="col-7 col-lg-4 item mx-2">
       <div
-        v-if="!editing"
+        v-if="!isEditing"
         class="row justify-content-between align-items-center title"
         :class="todo.status === 'completed' ? 'completed' : ''"
         :title="'Created: ' + created + '\nUpdated: ' + todo.updated_at"
@@ -14,7 +14,7 @@
           type="checkbox"
           @click="handleStatus(todo)"
           :checked="todo.status === 'completed'"
-          :disabled="loading || error"
+          :disabled="isLoading || getError"
         />
       </div>
       <input v-else type="text" class="form-control" v-model="editText" />
@@ -24,19 +24,19 @@
       class="btn btn-success"
       :disabled="
         todo.status === 'completed' ||
-          loading ||
-          error ||
-          (editing && !editText)
+          isLoading ||
+          getError ||
+          (isEditing && !editText)
       "
     >
-      {{ editing ? "Update" : "Edit" }}
+      {{ isEditing ? "Update" : "Edit" }}
     </button>
     <button
       @click="handleDelete(todo)"
       class="btn btn-danger ml-1"
-      :disabled="loading || error"
+      :disabled="isLoading || getError"
     >
-      {{ editing ? "Cancel" : " Delete" }}
+      {{ isEditing ? "Cancel" : " Delete" }}
     </button>
   </div>
 </template>
@@ -47,7 +47,7 @@ export default {
   name: "TodoItem",
   props: {
     todo: {},
-    editing: Boolean,
+    isEditing: Boolean,
   },
   data: function() {
     return {
@@ -56,17 +56,17 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("loader", ["loading", "error"]),
+    ...mapGetters("loader", ["isLoading", "getError"]),
   },
   methods: {
     ...mapActions("todo", [
       "deleteTodo",
       "updateTodo",
-      "statusTodo",
-      "selectToEdit",
+      "updateStatusTodo",
+      "selectTodoToEdit",
     ]),
     handleEdit(todo) {
-      if (this.editing) {
+      if (this.isEditing) {
         // update
         this.updateTodo({
           id: todo.id,
@@ -75,24 +75,24 @@ export default {
         });
       } else {
         // select todo to edit
-        this.selectToEdit(todo.id);
+        this.selectTodoToEdit(todo.id);
         this.editText = this.todo.content;
       }
-      this.editing = !this.editing;
+      this.isEditing = !this.isEditing;
     },
     handleStatus(todo) {
-      this.statusTodo({
+      this.updateStatusTodo({
         id: todo.id,
         content: todo.content,
         status: todo.status === "active" ? "completed" : "active",
       });
     },
     handleDelete(todo) {
-      if (this.editing) {
+      if (this.isEditing) {
         // cancel edit
-        this.editing = false;
+        this.isEditing = false;
         this.editText = this.todo.content;
-        this.selectToEdit(null);
+        this.selectTodoToEdit(null);
       } else {
         // delete
         this.$swal

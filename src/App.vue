@@ -42,12 +42,12 @@ export default {
   name: "App",
   computed: {
     currentUser() {
-      return this.$store.state.auth.user;
+      return this.$store.state.user.user;
     },
   },
   methods: {
     logOut() {
-      this.$store.dispatch("auth/logout");
+      this.$store.dispatch("user/logout");
       this.$store.dispatch("todo/clearTodo");
       this.$router.push("/login");
     },

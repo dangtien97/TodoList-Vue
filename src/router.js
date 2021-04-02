@@ -1,7 +1,5 @@
 import Vue from "vue";
 import Router from "vue-router";
-import Login from "./views/Login.vue";
-import Register from "./views/Register.vue";
 
 Vue.use(Router);
 
@@ -15,16 +13,15 @@ export const router = new Router({
     },
     {
       path: "/login",
-      component: Login,
+      component: () => import("./views/Login.vue"),
     },
     {
       path: "/register",
-      component: Register,
+      component: () => import("./views/Register.vue"),
     },
     {
       path: "/todo",
       name: "Todo",
-      // lazy-loaded
       component: () => import("./views/Todo.vue"),
     },
   ],

@@ -3,7 +3,7 @@
     <form class="form-inline justify-content-center mb-4">
       <input
         v-model="todoText"
-        :disabled="loading || error"
+        :disabled="isLoading || getError"
         type="text"
         class="form-control col-6 col-sm-6 col-lg-4 mx-3"
         placeholder="Add task here"
@@ -11,7 +11,7 @@
       <button
         @click.prevent="handleAdd"
         class="btn btn-primary col-4 col-sm-2 col-lg-1"
-        :disabled="loading || error || !todoText"
+        :disabled="isLoading || getError || !todoText"
       >
         Add Todo
       </button>
@@ -19,7 +19,7 @@
     <form class="form-inline justify-content-center mb-4">
       <input
         @input="handleSearch"
-        :disabled="loading || error"
+        :disabled="isLoading || getError"
         type="text"
         class="form-control col-10 col-sm-6 col-lg-4"
         placeholder="You can search here"
@@ -40,11 +40,10 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("loader", ["loading", "error"]),
-   
+    ...mapGetters("loader", ["isLoading", "getError"]),
   },
   methods: {
-    ...mapActions("todo", ["addTodo", "searchTodo", "selectToEdit"]),
+    ...mapActions("todo", ["createTodo", "searchTodo", "selectTodoToEdit"]),
     showAlert() {
       this.$swal.fire({
         position: "top-end",
@@ -55,8 +54,8 @@ export default {
       });
     },
     handleAdd() {
-      this.selectToEdit(null);
-      this.addTodo({
+      this.selectTodoToEdit(null);
+      this.createTodo({
         content: this.todoText,
       });
       this.todoText = "";

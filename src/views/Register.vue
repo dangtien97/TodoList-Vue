@@ -8,7 +8,7 @@
         class="profile-img-card"
       />
       <form name="form" @submit.prevent="handleRegister">
-        <div v-if="!successful">
+        <div v-if="!isSuccessful">
           <div class="form-group">
             <label for="username">Username</label>
             <input
@@ -19,7 +19,7 @@
               name="username"
             />
             <div
-              v-if="submitted && errors.has('username')"
+              v-if="isSubmitted && errors.has('username')"
               class="alert-danger"
             >
               {{ errors.first("username") }}
@@ -35,7 +35,7 @@
               name="password"
             />
             <div
-              v-if="submitted && errors.has('password')"
+              v-if="isSubmitted && errors.has('password')"
               class="alert-danger"
             >
               {{ errors.first("password") }}
@@ -50,7 +50,7 @@
       <div
         v-if="message"
         class="alert"
-        :class="successful ? 'alert-success' : 'alert-danger'"
+        :class="isSuccessful ? 'alert-success' : 'alert-danger'"
       >
         {{ message }}
       </div>
@@ -67,31 +67,31 @@ export default {
         username: "",
         password: "",
       },
-      submitted: false,
-      successful: false,
+      isSubmitted: false,
+      isSuccessful: false,
       message: "",
     };
   },
   computed: {
-    loggedIn() {
-      return this.$store.state.auth.status.loggedIn;
+    isUserLoggedIn() {
+      return this.$store.state.user.status.isUserLoggedIn;
     },
   },
   mounted() {
-    if (this.loggedIn) {
+    if (this.isUserLoggedIn) {
       this.$router.push("/todo");
     }
   },
   methods: {
     handleRegister() {
       this.message = "";
-      this.submitted = true;
+      this.isSubmitted = true;
       this.$validator.validate().then((isValid) => {
         if (isValid) {
-          this.$store.dispatch("auth/register", this.user).then(
+          this.$store.dispatch("user/register", this.user).then(
             (data) => {
               this.message = data.message;
-              this.successful = true;
+              this.isSuccessful = true;
               this.$router.push("/login");
             },
             (error) => {
@@ -99,7 +99,7 @@ export default {
                 (error.response && error.response.data.message) ||
                 error.message ||
                 error.toString();
-              this.successful = false;
+              this.isSuccessful = false;
             }
           );
         }

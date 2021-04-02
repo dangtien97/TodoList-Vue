@@ -24,10 +24,10 @@ async function register(user) {
   });
 }
 
-const AuthService = {
+const UserService = {
   login,
   logout,
   register,
 };
 
-export default AuthService;
+export default UserService;

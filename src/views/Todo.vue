@@ -4,20 +4,20 @@
     <div
       class="listDetail row mt-4 mb-2 justify-content-center align-items-center align-items-center"
     >
-      <p class="detail all">All: {{ allTodos.length }} tasks</p>
-      <p class="detail todo-done">Done: {{ todosDone.length }}</p>
+      <p class="detail all">All: {{ getTodos.length }} tasks</p>
+      <p class="detail todo-done">Done: {{ getDoneTodo.length }}</p>
     </div>
     <div
       class="row mt-2 mb-4 justify-content-center align-items-center align-items-center"
     >
-      <p class="detail error" v-if="error">{{ error }}</p>
+      <p class="detail error" v-if="getError">{{ error }}</p>
     </div>
     <todo-input />
     <div>
-      <div class="todo-item" v-for="todo in searchFilter" :key="todo.id">
+      <div class="todo-item" v-for="todo in getSearchFilter" :key="todo.id">
         <todo-item
           :todo="todo"
-          :editing="
+          :isEditing="
             todo.id === $store.state.todo.selectTodoToEdit ? true : false
           "
         />
@@ -35,10 +35,10 @@ export default {
   components: { TodoInput, TodoItem },
   name: "Todo",
   computed: {
-    ...mapGetters("todo", ["searchFilter", "allTodos", "todosDone"]),
-    ...mapGetters("loader", ["error"]),
+    ...mapGetters("todo", ["getSearchFilter", "getTodos", "getDoneTodo"]),
+    ...mapGetters("loader", ["getError"]),
     currentUser() {
-      return this.$store.state.auth.user;
+      return this.$store.state.user.user;
     },
   },
   data() {
@@ -46,7 +46,7 @@ export default {
   },
   mounted() {
     this.$store.dispatch("todo/fetchTodos");
-    if (!this.$store.state.auth.user) {
+    if (!this.$store.state.user.user) {
       this.$router.push("/login");
     }
   },

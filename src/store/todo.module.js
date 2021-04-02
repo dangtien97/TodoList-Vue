@@ -1,4 +1,13 @@
-import UserService from "@/services/todo.service";
+import TodoService from "@/services/todo.service";
+
+const SET_TODOS = "SET_TODOS";
+const ADD_TODO = "ADD_TODO";
+const DELETE_TODO = "DELETE_TODO";
+const UPDATE_TODO = "UPDATE_TODO";
+const UPDATE_STATUS_TODO = "UPDATE_STATUS_TODO";
+const SET_SELECTED_TODO = "SET_SELECTED_TODO";
+const SET_SEARCH_TODO = "SET_SEARCH_TODO";
+const CLEAR_TODOS = "CLEAR_TODOS";
 
 export const todo = {
   namespaced: true,
@@ -8,83 +17,80 @@ export const todo = {
     selectTodoToEdit: null,
   },
   getters: {
-    allTodos: (state) => state.data,
-    todosDone: (state) =>
+    getTodos: (state) => state.data,
+    getDoneTodo: (state) =>
       state.data.filter((todo) => todo.status == "completed"),
-    searchFilter: (state) =>
+    getSearchFilter: (state) =>
       state.data.filter((todo) =>
         todo.content.toLowerCase().includes(state.search.toLowerCase())
       ),
   },
   actions: {
     fetchTodos({ commit, rootState }) {
-      UserService.getTodosAPI().then((todos) =>
-        commit("fetch_todos", {
+      TodoService.getTodos().then((todos) =>
+        commit(SET_TODOS, {
           todos,
           rootState,
         })
       );
     },
-    addTodo({ commit }, todo) {
-      UserService.addTodoAPI(todo).then((todo) => commit("add_todo", todo));
+    createTodo({ commit }, todo) {
+      TodoService.createTodo(todo).then((todo) => commit(ADD_TODO, todo));
     },
     deleteTodo({ commit }, id) {
-      UserService.deleteTodoAPI(id).then(() => commit("delete_todo", id));
+      TodoService.deleteTodo(id).then(() => commit(DELETE_TODO, id));
     },
     updateTodo({ commit }, todo) {
-      UserService.updateTodoAPI(todo).then((todo) =>
-        commit("update_todo", todo)
+      TodoService.updateTodo(todo).then((todo) => commit(UPDATE_TODO, todo));
+    },
+    updateStatusTodo({ commit }, todo) {
+      TodoService.updateTodo(todo).then((todo) =>
+        commit(UPDATE_STATUS_TODO, todo)
       );
     },
-    statusTodo({ commit }, todo) {
-      UserService.updateTodoAPI(todo).then((todo) =>
-        commit("status_todo", todo)
-      );
-    },
-    selectToEdit({ commit }, id) {
-      commit("select_to_edit", id);
+    selectTodoToEdit({ commit }, id) {
+      commit(SET_SELECTED_TODO, id);
     },
     searchTodo({ commit }, searchText) {
-      commit("search_todo", searchText);
+      commit(SET_SEARCH_TODO, searchText);
     },
     clearTodo({ commit }) {
-      commit("clear_todo");
+      commit(CLEAR_TODOS);
     },
   },
   mutations: {
-    fetch_todos(state, { todos, rootState }) {
+    SET_TODOS(state, { todos, rootState }) {
       rootState.todo.data = todos;
     },
-    add_todo(state, todo) {
+    ADD_TODO(state, todo) {
       if (todo.content) {
         state.data.push(todo);
       }
     },
-    delete_todo(state, id) {
+    DELETE_TODO(state, id) {
       let index = state.data.findIndex((todo) => todo.id === id);
       state.data.splice(index, 1);
     },
-    update_todo(state, todoEdited) {
+    UPDATE_TODO(state, todoEdited) {
       let index = state.data.findIndex((todo) => todo.id === todoEdited.id);
       state.data.splice(index, 1, todoEdited);
       state.selectTodoToEdit = null;
     },
-    status_todo(state, todo) {
+    UPDATE_STATUS_TODO(state, todo) {
       let index = state.data.findIndex((item) => item.id === todo.id);
       state.data.splice(index, 1, todo);
     },
-    search_todo(state, searchText) {
+    SET_SEARCH_TODO(state, searchText) {
       state.search = searchText;
     },
-    select_to_edit(state, id) {
+    SET_SELECTED_TODO(state, id) {
       if (id) {
         state.selectTodoToEdit = id;
       } else {
         state.selectTodoToEdit = null;
       }
     },
-
-    clear_todo(state) {
+    CLEAR_TODOS(state) {
       state.data.splice(0);
       state.error = null;
     },

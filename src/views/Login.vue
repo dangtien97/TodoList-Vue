@@ -43,9 +43,9 @@
           </div>
         </div>
         <div class="form-group">
-          <button class="btn btn-primary btn-block" :disabled="loading">
+          <button class="btn btn-primary btn-block" :disabled="isLoading">
             <span
-              v-show="loading"
+              v-show="isLoading"
               class="spinner-border spinner-border-sm"
             ></span>
             <span> Login </span>
@@ -70,36 +70,36 @@ export default {
         username: "",
         password: "",
       },
-      loading: false,
+      isLoading: false,
       message: "",
     };
   },
   computed: {
-    loggedIn() {
-      return this.$store.state.auth.status.loggedIn;
+    isUserLoggedIn() {
+      return this.$store.state.user.status.isUserLoggedIn;
     },
   },
   created() {
-    if (this.loggedIn) {
+    if (this.isUserLoggedIn) {
       this.$router.push("todo");
     }
   },
   methods: {
     handleLogin() {
-      this.loading = true;
+      this.isLoading = true;
       this.$validator.validateAll().then((isValid) => {
         if (!isValid) {
-          this.loading = false;
+          this.isLoading = false;
           return;
         }
         if (this.user.username && this.user.password) {
-          this.$store.dispatch("auth/login", this.user).then(
+          this.$store.dispatch("user/login", this.user).then(
             () => {
               this.$store.dispatch("loader/clearError");
               this.$router.push("/todo");
             },
             (error) => {
-              this.loading = false;
+              this.isLoading = false;
               this.message =
                 (error.response && error.response.data.message) ||
                 error.message ||
