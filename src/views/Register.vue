@@ -72,16 +72,6 @@ export default {
       message: "",
     };
   },
-  computed: {
-    isUserLoggedIn() {
-      return this.$store.state.user.status.isUserLoggedIn;
-    },
-  },
-  mounted() {
-    if (this.isUserLoggedIn) {
-      this.$router.push("/todo");
-    }
-  },
   methods: {
     handleRegister() {
       this.message = "";

@@ -15,12 +15,7 @@
     <todo-input />
     <div>
       <div class="todo-item" v-for="todo in getSearchFilter" :key="todo.id">
-        <todo-item
-          :todo="todo"
-          :isEditing="
-            todo.id === $store.state.todo.selectTodoToEdit ? true : false
-          "
-        />
+        <todo-item :todo="todo" />
       </div>
     </div>
   </div>

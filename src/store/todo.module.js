@@ -14,7 +14,7 @@ export const todo = {
   state: {
     data: [],
     search: "",
-    selectTodoToEdit: null,
+    selectedTodoToEdit: null,
   },
   getters: {
     getTodos: (state) => state.data,
@@ -24,6 +24,7 @@ export const todo = {
       state.data.filter((todo) =>
         todo.content.toLowerCase().includes(state.search.toLowerCase())
       ),
+    getSelectedTodoToEdit: (state) => state.selectedTodoToEdit,
   },
   actions: {
     fetchTodos({ commit, rootState }) {
@@ -74,7 +75,7 @@ export const todo = {
     [UPDATE_TODO](state, todoEdited) {
       let index = state.data.findIndex((todo) => todo.id === todoEdited.id);
       state.data.splice(index, 1, todoEdited);
-      state.selectTodoToEdit = null;
+      state.selectedTodoToEdit = null;
     },
     [UPDATE_STATUS_TODO](state, todo) {
       let index = state.data.findIndex((item) => item.id === todo.id);
@@ -85,9 +86,9 @@ export const todo = {
     },
     [SET_SELECTED_TODO](state, id) {
       if (id) {
-        state.selectTodoToEdit = id;
+        state.selectedTodoToEdit = id;
       } else {
-        state.selectTodoToEdit = null;
+        state.selectedTodoToEdit = null;
       }
     },
     [CLEAR_TODOS](state) {

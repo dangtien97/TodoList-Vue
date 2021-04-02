@@ -3,7 +3,7 @@
     <nav class="navbar navbar-expand navbar-dark bg-dark">
       <div class="navbar-nav mr-auto">
         <li class="nav-item">
-          <router-link to="/todo" class="nav-link">
+          <router-link to="/" class="nav-link">
             Todo List
           </router-link>
         </li>

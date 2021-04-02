@@ -2,7 +2,7 @@
   <div class="row my-4 justify-content-center align-items-center">
     <div class="col-7 col-lg-4 item mx-2">
       <div
-        v-if="!isEditing"
+        v-if="!isSelectedToEdit(todo)"
         class="row justify-content-between align-items-center title"
         :class="todo.status === 'completed' ? 'completed' : ''"
         :title="'Created: ' + created + '\nUpdated: ' + todo.updated_at"
@@ -26,17 +26,17 @@
         todo.status === 'completed' ||
           isLoading ||
           getError ||
-          (isEditing && !editText)
+          (isSelectedToEdit(todo) && !editText)
       "
     >
-      {{ isEditing ? "Update" : "Edit" }}
+      {{ isSelectedToEdit(todo) ? "Update" : "Edit" }}
     </button>
     <button
       @click="handleDelete(todo)"
       class="btn btn-danger ml-1"
       :disabled="isLoading || getError"
     >
-      {{ isEditing ? "Cancel" : " Delete" }}
+      {{ isSelectedToEdit(todo) ? "Cancel" : " Delete" }}
     </button>
   </div>
 </template>
@@ -47,7 +47,6 @@ export default {
   name: "TodoItem",
   props: {
     todo: {},
-    isEditing: Boolean,
   },
   data: function() {
     return {
@@ -57,6 +56,7 @@ export default {
   },
   computed: {
     ...mapGetters("loader", ["isLoading", "getError"]),
+    ...mapGetters("todo", ["getSelectedTodoToEdit"]),
   },
   methods: {
     ...mapActions("todo", [
@@ -65,20 +65,23 @@ export default {
       "updateStatusTodo",
       "selectTodoToEdit",
     ]),
+    isSelectedToEdit(todo) {
+      return todo.id === this.getSelectedTodoToEdit;
+    },
     handleEdit(todo) {
-      if (this.isEditing) {
+      if (this.isSelectedToEdit(todo)) {
         // update
         this.updateTodo({
           id: todo.id,
           content: this.editText,
           status: "active",
         });
+        this.selectTodoToEdit(null);
       } else {
         // select todo to edit
         this.selectTodoToEdit(todo.id);
         this.editText = this.todo.content;
       }
-      this.isEditing = !this.isEditing;
     },
     handleStatus(todo) {
       this.updateStatusTodo({
@@ -88,9 +91,9 @@ export default {
       });
     },
     handleDelete(todo) {
-      if (this.isEditing) {
+      if (this.isSelectedToEdit(todo)) {
         // cancel edit
-        this.isEditing = false;
+        // this.isSelectedToEdit(todo) = false;
         this.editText = this.todo.content;
         this.selectTodoToEdit(null);
       } else {

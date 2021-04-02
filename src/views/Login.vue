@@ -74,16 +74,6 @@ export default {
       message: "",
     };
   },
-  computed: {
-    isUserLoggedIn() {
-      return this.$store.state.user.status.isUserLoggedIn;
-    },
-  },
-  created() {
-    if (this.isUserLoggedIn) {
-      this.$router.push("todo");
-    }
-  },
   methods: {
     handleLogin() {
       this.isLoading = true;
@@ -96,7 +86,7 @@ export default {
           this.$store.dispatch("user/login", this.user).then(
             () => {
               this.$store.dispatch("loader/clearError");
-              this.$router.push("/todo");
+              this.$router.push("/");
             },
             (error) => {
               this.isLoading = false;
