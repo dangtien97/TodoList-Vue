@@ -43,7 +43,12 @@
           </div>
         </div>
         <div class="form-group">
-          <button class="btn btn-primary btn-block" :disabled="isLoading">
+          <button
+            class="btn btn-primary btn-block"
+            :disabled="
+              isLoading || errors.has('username') || errors.has('password')
+            "
+          >
             <span
               v-show="isLoading"
               class="spinner-border spinner-border-sm"
@@ -52,8 +57,8 @@
           </button>
         </div>
         <div class="form-group">
-          <div v-if="message" class="alert alert-danger" role="alert">
-            {{ message }}
+          <div v-if="getError" class="alert alert-danger" role="alert">
+            {{ getError }}
           </div>
         </div>
       </form>
@@ -62,6 +67,7 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
 export default {
   name: "Login",
   data() {
@@ -70,30 +76,30 @@ export default {
         username: "",
         password: "",
       },
-      isLoading: false,
-      message: "",
     };
   },
+  computed: {
+    ...mapGetters("loader", ["isLoading", "getError"]),
+  },
   methods: {
+    ...mapActions("loader", ["clearError", "setError"]),
+    ...mapActions("user", ["login"]),
+
     handleLogin() {
-      this.isLoading = true;
-      this.$validator.validateAll().then((isValid) => {
-        if (!isValid) {
-          this.isLoading = false;
-          return;
-        }
-        if (this.user.username && this.user.password) {
-          this.$store.dispatch("user/login", this.user).then(
+      this.clearError();
+      this.$validator.validate().then((isValid) => {
+        if (isValid) {
+          this.login(this.user).then(
             () => {
-              this.$store.dispatch("loader/clearError");
+              this.clearError();
               this.$router.push("/");
             },
             (error) => {
-              this.isLoading = false;
-              this.message =
+              this.setError(
                 (error.response && error.response.data.message) ||
-                error.message ||
-                error.toString();
+                  error.message ||
+                  error.toString()
+              );
             }
           );
         }

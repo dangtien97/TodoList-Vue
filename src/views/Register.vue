@@ -8,7 +8,7 @@
         class="profile-img-card"
       />
       <form name="form" @submit.prevent="handleRegister">
-        <div v-if="!isSuccessful">
+        <div>
           <div class="form-group">
             <label for="username">Username</label>
             <input
@@ -18,10 +18,7 @@
               class="form-control"
               name="username"
             />
-            <div
-              v-if="isSubmitted && errors.has('username')"
-              class="alert-danger"
-            >
+            <div v-if="errors.has('username')" class="alert-danger">
               {{ errors.first("username") }}
             </div>
           </div>
@@ -34,31 +31,35 @@
               class="form-control"
               name="password"
             />
-            <div
-              v-if="isSubmitted && errors.has('password')"
-              class="alert-danger"
-            >
+            <div v-if="errors.has('password')" class="alert-danger">
               {{ errors.first("password") }}
             </div>
           </div>
           <div class="form-group">
-            <button class="btn btn-primary btn-block">Sign Up</button>
+            <button
+              class="btn btn-primary btn-block"
+              :disabled="
+                isLoading || errors.has('username') || errors.has('password')
+              "
+            >
+              <span
+                v-show="isLoading"
+                class="spinner-border spinner-border-sm"
+              ></span>
+              <span> Sign Up </span>
+            </button>
           </div>
         </div>
       </form>
-
-      <div
-        v-if="message"
-        class="alert"
-        :class="isSuccessful ? 'alert-success' : 'alert-danger'"
-      >
-        {{ message }}
+      <div v-if="getError" role="alert" class="alert alert-danger">
+        {{ getError }}
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
 export default {
   name: "Register",
   data() {
@@ -67,29 +68,29 @@ export default {
         username: "",
         password: "",
       },
-      isSubmitted: false,
-      isSuccessful: false,
-      message: "",
     };
   },
+  computed: {
+    ...mapGetters("loader", ["isLoading", "getError"]),
+  },
   methods: {
+    ...mapActions("user", ["register"]),
+    ...mapActions("loader", ["clearError", "setError"]),
+
     handleRegister() {
-      this.message = "";
-      this.isSubmitted = true;
+      this.clearError();
       this.$validator.validate().then((isValid) => {
         if (isValid) {
-          this.$store.dispatch("user/register", this.user).then(
-            (data) => {
-              this.message = data.message;
-              this.isSuccessful = true;
+          this.register(this.user).then(
+            () => {
               this.$router.push("/login");
             },
             (error) => {
-              this.message =
+              this.setError(
                 (error.response && error.response.data.message) ||
-                error.message ||
-                error.toString();
-              this.isSuccessful = false;
+                  error.message ||
+                  error.toString()
+              );
             }
           );
         }

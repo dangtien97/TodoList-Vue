@@ -44,15 +44,6 @@ export default {
   },
   methods: {
     ...mapActions("todo", ["createTodo", "searchTodo", "selectTodoToEdit"]),
-    showAlert() {
-      this.$swal.fire({
-        position: "top-end",
-        icon: "success",
-        title: "Your work has been saved",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-    },
     handleAdd() {
       this.selectTodoToEdit(null);
       this.createTodo({

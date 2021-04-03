@@ -12,31 +12,17 @@ export const user = {
   getters: { getUser: (state) => state.user },
   actions: {
     login({ commit }, user) {
-      return UserService.login(user).then(
-        (user) => {
-          commit(SET_LOGIN_SUCCESS, user);
-          return Promise.resolve(user);
-        },
-        (error) => {
-          return Promise.reject(error);
-        }
-      );
+      return UserService.login(user).then((user) => {
+        commit(SET_LOGIN_SUCCESS, user);
+        return user.data;
+      });
     },
-
     logout({ commit }) {
       UserService.logout();
       commit(SET_LOGOUT);
     },
-
-    register(user) {
-      return UserService.register(user).then(
-        (res) => {
-          return Promise.resolve(res.data);
-        },
-        (error) => {
-          return Promise.reject(error);
-        }
-      );
+    register(_, user) {
+      return UserService.register(user).then((res) => res.data);
     },
   },
   mutations: {
