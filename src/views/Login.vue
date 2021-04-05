@@ -12,7 +12,7 @@
           <label for="username">Username</label>
           <input
             v-model="user.username"
-            v-validate="'required'"
+            v-validate.continues="'required'"
             type="text"
             class="form-control"
             name="username"
@@ -22,14 +22,14 @@
             class="alert alert-danger"
             role="alert"
           >
-            Username is required!
+            {{ getValidationsErrors(errors.collect("username")) }}
           </div>
         </div>
         <div class="form-group">
           <label for="password">Password</label>
           <input
             v-model="user.password"
-            v-validate="'required'"
+            v-validate.continues="'required'"
             type="password"
             class="form-control"
             name="password"
@@ -39,7 +39,7 @@
             class="alert alert-danger"
             role="alert"
           >
-            Password is required!
+            {{ getValidationsErrors(errors).collect("password") }}
           </div>
         </div>
         <div class="form-group">
@@ -68,6 +68,8 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import { getValidationsErrors } from "@/utils/vee-validate/getError";
+
 export default {
   name: "Login",
   data() {
@@ -84,6 +86,10 @@ export default {
   methods: {
     ...mapActions("loader", ["clearError", "setError"]),
     ...mapActions("user", ["login"]),
+
+    getValidationsErrors(errors) {
+      return getValidationsErrors(errors);
+    },
 
     async handleLogin() {
       this.clearError();

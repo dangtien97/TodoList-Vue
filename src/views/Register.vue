@@ -13,26 +13,26 @@
             <label for="username">Username</label>
             <input
               v-model="user.username"
-              v-validate="'required|min:3|max:20'"
+              v-validate.continues="'alpha_num|min:3|max:20'"
               type="text"
               class="form-control"
               name="username"
             />
             <div v-if="errors.has('username')" class="alert-danger">
-              {{ errors.first("username") }}
+              {{ getValidationsErrors(errors.collect("username")) }}
             </div>
           </div>
           <div class="form-group">
             <label for="password">Password</label>
             <input
               v-model="user.password"
-              v-validate="'required|min:6|max:40'"
+              v-validate.continues="'min:6|max:40'"
               type="password"
               class="form-control"
               name="password"
             />
             <div v-if="errors.has('password')" class="alert-danger">
-              {{ errors.first("password") }}
+              {{ getValidationsErrors(errors.collect("password")) }}
             </div>
           </div>
           <div class="form-group">
@@ -60,6 +60,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import { getValidationsErrors } from "@/utils/vee-validate/getError";
 export default {
   name: "Register",
   data() {
@@ -76,6 +77,10 @@ export default {
   methods: {
     ...mapActions("user", ["register"]),
     ...mapActions("loader", ["clearError", "setError"]),
+
+    getValidationsErrors(errors) {
+      return getValidationsErrors(errors);
+    },
 
     async handleRegister() {
       this.clearError();
