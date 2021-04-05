@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <layout-default>
     <h1 class="m-5 text-center">Hello {{ currentUser.username }}!</h1>
     <div
       class="listDetail row mt-4 mb-2 justify-content-center align-items-center align-items-center"
@@ -18,16 +18,17 @@
         <todo-item :todo="todo" />
       </div>
     </div>
-  </div>
+  </layout-default>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
 import TodoInput from "../components/TodoInput.vue";
 import TodoItem from "../components/TodoItem.vue";
+import LayoutDefault from "@/layout/LayoutDefault.vue";
 
 export default {
-  components: { TodoInput, TodoItem },
+  components: { TodoInput, TodoItem, LayoutDefault },
   name: "Todo",
   computed: {
     ...mapGetters("todo", ["getSearchFilter", "getTodos", "getDoneTodo"]),

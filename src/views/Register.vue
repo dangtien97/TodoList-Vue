@@ -1,5 +1,5 @@
 <template>
-  <div class="col-md-12">
+  <layout-default>
     <div class="card card-container">
       <h3 class="mb-4">Register</h3>
       <img
@@ -19,7 +19,7 @@
               name="username"
             />
             <div v-if="errors.has('username')" class="alert-danger">
-              {{ getValidationsErrors(errors.collect("username")) }}
+              {{ displayValidationsErrors(errors, "username") }}
             </div>
           </div>
           <div class="form-group">
@@ -32,7 +32,7 @@
               name="password"
             />
             <div v-if="errors.has('password')" class="alert-danger">
-              {{ getValidationsErrors(errors.collect("password")) }}
+              {{ displayValidationsErrors(errors, "password") }}
             </div>
           </div>
           <div class="form-group">
@@ -55,13 +55,15 @@
         {{ getError }}
       </div>
     </div>
-  </div>
+  </layout-default>
 </template>
 
 <script>
 import { mapActions, mapGetters } from "vuex";
 import { getValidationsErrors } from "@/utils/vee-validate/getError";
+import LayoutDefault from "@/layout/LayoutDefault.vue";
 export default {
+  components: { LayoutDefault },
   name: "Register",
   data() {
     return {
@@ -78,8 +80,8 @@ export default {
     ...mapActions("user", ["register"]),
     ...mapActions("loader", ["clearError", "setError"]),
 
-    getValidationsErrors(errors) {
-      return getValidationsErrors(errors);
+    displayValidationsErrors(errors, fieldName) {
+      return getValidationsErrors(errors, fieldName);
     },
 
     async handleRegister() {

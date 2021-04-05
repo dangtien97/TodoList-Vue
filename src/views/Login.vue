@@ -1,5 +1,5 @@
 <template>
-  <div class="col-md-12">
+  <layout-default>
     <div class="card card-container">
       <h3 class="mb-4">Login</h3>
       <img
@@ -12,7 +12,7 @@
           <label for="username">Username</label>
           <input
             v-model="user.username"
-            v-validate.continues="'required'"
+            v-validate="'required'"
             type="text"
             class="form-control"
             name="username"
@@ -22,14 +22,14 @@
             class="alert alert-danger"
             role="alert"
           >
-            {{ getValidationsErrors(errors.collect("username")) }}
+            {{ displayValidationsErrors(errors, "username") }}
           </div>
         </div>
         <div class="form-group">
           <label for="password">Password</label>
           <input
             v-model="user.password"
-            v-validate.continues="'required'"
+            v-validate="'required'"
             type="password"
             class="form-control"
             name="password"
@@ -39,7 +39,7 @@
             class="alert alert-danger"
             role="alert"
           >
-            {{ getValidationsErrors(errors).collect("password") }}
+            {{ displayValidationsErrors(errors, "password") }}
           </div>
         </div>
         <div class="form-group">
@@ -63,14 +63,16 @@
         </div>
       </form>
     </div>
-  </div>
+  </layout-default>
 </template>
 
 <script>
 import { mapActions, mapGetters } from "vuex";
 import { getValidationsErrors } from "@/utils/vee-validate/getError";
+import LayoutDefault from "@/layout/LayoutDefault.vue";
 
 export default {
+  components: { LayoutDefault },
   name: "Login",
   data() {
     return {
@@ -87,8 +89,8 @@ export default {
     ...mapActions("loader", ["clearError", "setError"]),
     ...mapActions("user", ["login"]),
 
-    getValidationsErrors(errors) {
-      return getValidationsErrors(errors);
+    displayValidationsErrors(errors, fieldName) {
+      return getValidationsErrors(errors, fieldName);
     },
 
     async handleLogin() {
