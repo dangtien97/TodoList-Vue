@@ -11,18 +11,18 @@ export const user = {
   state: initialState,
   getters: { getUser: (state) => state.user },
   actions: {
-    login({ commit }, user) {
-      return UserService.login(user).then((user) => {
-        commit(SET_LOGIN_SUCCESS, user);
-        return user.data;
-      });
+    async login({ commit }, user) {
+      const response = await UserService.login(user);
+      commit(SET_LOGIN_SUCCESS, response);
+      return response.data;
     },
     logout({ commit }) {
       UserService.logout();
       commit(SET_LOGOUT);
     },
-    register(_, user) {
-      return UserService.register(user).then((res) => res.data);
+    async register(_, user) {
+      const response = await UserService.register(user);
+      return response.data;
     },
   },
   mutations: {

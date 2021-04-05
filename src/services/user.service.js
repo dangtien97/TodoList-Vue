@@ -1,24 +1,24 @@
 import axios from "@/lib/axios/axios";
 
-const AUTH_PATH = "/auth/";
+const AUTH_PATH = "/auth";
 
 async function login(user) {
-  const response = await axios.post(AUTH_PATH + "login", {
+  const response = await axios.post(`${AUTH_PATH}/login`, {
     username: user.username,
     password: user.password,
   });
-  if (response.data.token) {
-    localStorage.setItem("user", JSON.stringify(response.data));
+  if (response.token) {
+    localStorage.setItem("user", JSON.stringify(response));
   }
-  return response.data;
+  return response;
 }
 
 function logout() {
   localStorage.removeItem("user");
 }
 
-async function register(user) {
-  return await axios.post(AUTH_PATH + "register", {
+function register(user) {
+  return axios.post(`${AUTH_PATH}/register`, {
     username: user.username,
     password: user.password,
   });

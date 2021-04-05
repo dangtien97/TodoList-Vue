@@ -56,17 +56,17 @@ export default {
   },
   computed: {
     ...mapGetters("loader", ["isLoading", "getError"]),
-    ...mapGetters("todo", ["getSelectedTodoToEdit"]),
+    ...mapGetters("todo", ["getSelectedTodo"]),
   },
   methods: {
     ...mapActions("todo", [
       "deleteTodo",
       "updateTodo",
       "updateStatusTodo",
-      "selectTodoToEdit",
+      "selectTodo",
     ]),
     isSelectedToEdit(todo) {
-      return todo.id === this.getSelectedTodoToEdit;
+      return todo.id === this.getSelectedTodo;
     },
     handleEdit(todo) {
       if (this.isSelectedToEdit(todo)) {
@@ -76,10 +76,10 @@ export default {
           content: this.editText,
           status: "active",
         });
-        this.selectTodoToEdit(null);
+        this.selectTodo(null);
       } else {
         // select todo to edit
-        this.selectTodoToEdit(todo.id);
+        this.selectTodo(todo.id);
         this.editText = this.todo.content;
       }
     },
@@ -95,7 +95,7 @@ export default {
         // cancel edit
         // this.isSelectedToEdit(todo) = false;
         this.editText = this.todo.content;
-        this.selectTodoToEdit(null);
+        this.selectTodo(null);
       } else {
         // delete
         this.$swal

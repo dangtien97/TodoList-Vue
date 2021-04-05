@@ -43,9 +43,9 @@ export default {
     ...mapGetters("loader", ["isLoading", "getError"]),
   },
   methods: {
-    ...mapActions("todo", ["createTodo", "searchTodo", "selectTodoToEdit"]),
+    ...mapActions("todo", ["createTodo", "searchTodo", "selectTodo"]),
     handleAdd() {
-      this.selectTodoToEdit(null);
+      this.selectTodo(null);
       this.createTodo({
         content: this.todoText,
       });

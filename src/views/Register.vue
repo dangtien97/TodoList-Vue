@@ -77,24 +77,13 @@ export default {
     ...mapActions("user", ["register"]),
     ...mapActions("loader", ["clearError", "setError"]),
 
-    handleRegister() {
+    async handleRegister() {
       this.clearError();
-      this.$validator.validate().then((isValid) => {
-        if (isValid) {
-          this.register(this.user).then(
-            () => {
-              this.$router.push("/login");
-            },
-            (error) => {
-              this.setError(
-                (error.response && error.response.data.message) ||
-                  error.message ||
-                  error.toString()
-              );
-            }
-          );
-        }
-      });
+      const isValid = await this.$validator.validate();
+      if (isValid) {
+        await this.register(this.user);
+        this.$router.push("/login");
+      }
     },
   },
 };

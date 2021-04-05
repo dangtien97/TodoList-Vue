@@ -10,7 +10,7 @@
     <div
       class="row mt-2 mb-4 justify-content-center align-items-center align-items-center"
     >
-      <p class="detail error" v-if="getError">{{ error }}</p>
+      <p class="detail error" v-if="getError">{{ getError }}</p>
     </div>
     <todo-input />
     <div>
@@ -36,14 +36,8 @@ export default {
       return this.$store.state.user.user;
     },
   },
-  data() {
-    return {};
-  },
   mounted() {
     this.$store.dispatch("todo/fetchTodos");
-    if (!this.$store.state.user.user) {
-      this.$router.push("/login");
-    }
   },
 };
 </script>

@@ -85,25 +85,14 @@ export default {
     ...mapActions("loader", ["clearError", "setError"]),
     ...mapActions("user", ["login"]),
 
-    handleLogin() {
+    async handleLogin() {
       this.clearError();
-      this.$validator.validate().then((isValid) => {
-        if (isValid) {
-          this.login(this.user).then(
-            () => {
-              this.clearError();
-              this.$router.push("/");
-            },
-            (error) => {
-              this.setError(
-                (error.response && error.response.data.message) ||
-                  error.message ||
-                  error.toString()
-              );
-            }
-          );
-        }
-      });
+      const isValid = await this.$validator.validate();
+      if (isValid) {
+        await this.login(this.user);
+        this.clearError();
+        this.$router.push("/");
+      }
     },
   },
 };

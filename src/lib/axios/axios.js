@@ -19,8 +19,12 @@ instance.interceptors.request.use(
   },
   (error) => {
     // Do something with request error
-    store.dispatch("loader/setError", { error });
-    return Promise.reject(error);
+    store.dispatch(
+      "loader/setError",
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message
+    );
   }
 );
 
@@ -31,13 +35,17 @@ instance.interceptors.response.use(
     // Do something with response data
     // store.commit("loader/END_REQUEST");
     store.dispatch("loader/endRequest");
-    return response;
+    return response.data;
   },
   function(error) {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
-    store.dispatch("loader/setError", { error });
-    return Promise.reject(error);
+    store.dispatch(
+      "loader/setError",
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message
+    );
   }
 );
 
