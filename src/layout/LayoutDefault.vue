@@ -9,7 +9,7 @@
         </li>
       </div>
 
-      <div v-if="!currentUser" class="navbar-nav ml-auto">
+      <div v-if="!getUser" class="navbar-nav ml-auto">
         <li class="nav-item">
           <router-link to="/register" class="nav-link">
             Sign Up
@@ -22,7 +22,7 @@
         </li>
       </div>
 
-      <div v-if="currentUser" class="navbar-nav ml-auto">
+      <div v-if="getUser" class="navbar-nav ml-auto">
         <li class="nav-item ml-5">
           <a class="nav-link" href @click.prevent="logOut">
             Log out
@@ -37,11 +37,10 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   computed: {
-    currentUser() {
-      return this.$store.state.user.user;
-    },
+    ...mapGetters("user", ["getUser"]),
   },
   methods: {
     logOut() {

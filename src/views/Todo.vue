@@ -1,6 +1,6 @@
 <template>
   <layout-default>
-    <h1 class="m-5 text-center">Hello {{ currentUser.username }}!</h1>
+    <h1 class="m-5 text-center">Hello {{ getUser.username }}!</h1>
     <div
       class="listDetail row mt-4 mb-2 justify-content-center align-items-center align-items-center"
     >
@@ -27,8 +27,8 @@
 
 <script>
 import { mapGetters } from "vuex";
-import TodoInput from "../components/TodoInput.vue";
-import TodoItem from "../components/TodoItem.vue";
+import TodoInput from "@/components/TodoInput.vue";
+import TodoItem from "@/components/TodoItem.vue";
 import LayoutDefault from "@/layout/LayoutDefault.vue";
 
 export default {
@@ -47,9 +47,7 @@ export default {
       "isCanFetchMoreTodos",
     ]),
     ...mapGetters("loader", ["isLoading", "getError"]),
-    currentUser() {
-      return this.$store.state.user.user;
-    },
+    ...mapGetters("user", ["getUser"]),
   },
   methods: {
     async loadMore() {

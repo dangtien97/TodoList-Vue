@@ -3,8 +3,10 @@ import UserService from "@/services/user.service";
 const SET_LOGIN_SUCCESS = "SET_LOGIN_SUCCESS";
 const SET_LOGOUT = "SET_LOGOUT";
 
-const getUser = JSON.parse(localStorage.getItem("user"));
-const initialState = getUser ? { user: getUser } : { user: null };
+const userInLocalStorage = JSON.parse(localStorage.getItem("user"));
+const initialState = userInLocalStorage
+  ? { user: userInLocalStorage }
+  : { user: null };
 
 export const user = {
   namespaced: true,
@@ -21,8 +23,7 @@ export const user = {
       commit(SET_LOGOUT);
     },
     async register(_, user) {
-      const response = await UserService.register(user);
-      return response.data;
+      await UserService.register(user);
     },
   },
   mutations: {
