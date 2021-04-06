@@ -2,8 +2,8 @@ import axios from "@/lib/axios/axios";
 
 const TODO_PATH = "/api/todos";
 
-async function getTodos(id, limit) {
-  const response = await axios.get(`${TODO_PATH}?page=${id}&limit=${limit}`);
+async function getTodos(page, limit) {
+  const response = await axios.get(`${TODO_PATH}?page=${page}&limit=${limit}`);
   return response.items;
 }
 

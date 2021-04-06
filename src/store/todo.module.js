@@ -29,12 +29,9 @@ export const todo = {
     isCanFetchMoreTodos: (state) => state.isCanFetchMoreTodos,
   },
   actions: {
-    async fetchTodos({ commit, rootState }, { page, limit }) {
+    async fetchTodos({ commit }, { page, limit }) {
       const todos = await TodoService.getTodos(page, limit);
-      commit(SET_TODOS, {
-        todos,
-        rootState,
-      });
+      commit(SET_TODOS, todos);
     },
     async createTodo({ commit }, todo) {
       const response = await TodoService.createTodo(todo);
@@ -63,9 +60,9 @@ export const todo = {
     },
   },
   mutations: {
-    [SET_TODOS](state, { todos, rootState }) {
+    [SET_TODOS](state, todos) {
       if (todos.length) {
-        rootState.todo.data = rootState.todo.data.concat(todos);
+        state.data.push(...todos);
       } else {
         state.isCanFetchMoreTodos = false;
       }
