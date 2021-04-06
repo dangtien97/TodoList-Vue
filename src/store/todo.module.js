@@ -6,6 +6,7 @@ const DELETE_TODO = "DELETE_TODO";
 const UPDATE_TODO = "UPDATE_TODO";
 const UPDATE_STATUS_TODO = "UPDATE_STATUS_TODO";
 const SET_SELECTED_TODO = "SET_SELECTED_TODO";
+const SET_SELECTED_TODOS = "SET_SELECTED_TODOS";
 const SET_SEARCH_TODO = "SET_SEARCH_TODO";
 const CLEAR_TODOS = "CLEAR_TODOS";
 
@@ -14,7 +15,8 @@ export const todo = {
   state: {
     data: [],
     search: "",
-    selectedTodo: null,
+    selectedTodoToEdit: null,
+    selectedTodosToDelete: [],
     isCanFetchMoreTodos: true,
   },
   getters: {
@@ -25,7 +27,8 @@ export const todo = {
       state.data.filter((todo) =>
         todo.content.toLowerCase().includes(state.search.toLowerCase())
       ),
-    getSelectedTodo: (state) => state.selectedTodo,
+    getSelectedTodoToEdit: (state) => state.selectedTodoToEdit,
+    getSelectedTodosToDelete: (state) => state.selectedTodosToDelete,
     isCanFetchMoreTodos: (state) => state.isCanFetchMoreTodos,
   },
   actions: {
@@ -52,6 +55,9 @@ export const todo = {
     selectTodo({ commit }, id) {
       commit(SET_SELECTED_TODO, id);
     },
+    selectTodos({ commit }, id) {
+      commit(SET_SELECTED_TODOS, id);
+    },
     searchTodo({ commit }, searchText) {
       commit(SET_SEARCH_TODO, searchText);
     },
@@ -63,6 +69,7 @@ export const todo = {
     [SET_TODOS](state, todos) {
       if (todos.length) {
         state.data.push(...todos);
+        state.selectedTodosToDelete = [];
       } else {
         state.isCanFetchMoreTodos = false;
       }
@@ -73,13 +80,16 @@ export const todo = {
       }
     },
     [DELETE_TODO](state, id) {
-      let index = state.data.findIndex((todo) => todo.id === id);
-      state.data.splice(index, 1);
+      id.map((res) => {
+        let index = state.data.findIndex((todo) => todo.id === res);
+        state.data.splice(index, 1);
+      });
+      state.selectedTodosToDelete = [];
     },
     [UPDATE_TODO](state, todoEdited) {
       let index = state.data.findIndex((todo) => todo.id === todoEdited.id);
       state.data.splice(index, 1, todoEdited);
-      state.selectedTodo = null;
+      state.selectedTodoToEdit = null;
     },
     [UPDATE_STATUS_TODO](state, todo) {
       let index = state.data.findIndex((item) => item.id === todo.id);
@@ -89,7 +99,22 @@ export const todo = {
       state.search = searchText;
     },
     [SET_SELECTED_TODO](state, id) {
-      state.selectedTodo = id;
+      state.selectedTodoToEdit = id;
+    },
+    [SET_SELECTED_TODOS](state, id) {
+      if (id === "all") {
+        if (state.selectedTodosToDelete.length === state.data.length) {
+          state.selectedTodosToDelete = [];
+        } else {
+          state.selectedTodosToDelete = [];
+          state.data.map((todo) => state.selectedTodosToDelete.push(todo.id));
+        }
+      } else {
+        let index = state.selectedTodosToDelete.findIndex((res) => res === id);
+        if (index >= 0) {
+          state.selectedTodosToDelete.splice(index, 1);
+        } else state.selectedTodosToDelete.push(id);
+      }
     },
     [CLEAR_TODOS](state) {
       state.data.splice(0);

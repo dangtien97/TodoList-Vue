@@ -13,6 +13,22 @@
       <p class="detail error" v-if="getError">{{ getError }}</p>
     </div>
     <todo-input />
+    <div class="row justify-content-center col-xs-12 col-10 align-items-center">
+      <input
+        type="checkbox"
+        :disabled="isLoading || getError"
+        :checked="this.getTodos.length === this.getSelectedTodosToDelete.length"
+        @click="selectTodos('all')"
+      />
+      <button
+        class="btn btn-danger mx-2"
+        @click="handleDeleteTodos"
+        :disabled="isLoading || getError || getSelectedTodosToDelete.length < 1"
+      >
+        Delete Tasks
+      </button>
+      <p class="detail all ">Selected: {{ getSelectedTodosToDelete.length }}</p>
+    </div>
     <div id="todo-list">
       <div class="todo-item" v-for="todo in getSearchFilter" :key="todo.id">
         <todo-item :todo="todo" />
@@ -26,7 +42,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import TodoInput from "@/components/TodoInput.vue";
 import TodoItem from "@/components/TodoItem.vue";
 import LayoutDefault from "@/layout/LayoutDefault.vue";
@@ -45,17 +61,33 @@ export default {
       "getTodos",
       "getDoneTodo",
       "isCanFetchMoreTodos",
+      "getSelectedTodosToDelete",
     ]),
     ...mapGetters("loader", ["isLoading", "getError"]),
     ...mapGetters("user", ["getUser"]),
   },
   methods: {
+    ...mapActions("todo", ["deleteTodo", "selectTodos"]),
     async loadMore() {
       if (!this.isCanFetchMoreTodos) return;
       await this.$store.dispatch("todo/fetchTodos", {
         page: ++this.page,
         limit: 10,
       });
+    },
+    handleDeleteTodos() {
+      this.$swal
+        .fire({
+          title: "Are you sure?",
+          text: "You won't be able to revert this!",
+          icon: "warning",
+          showCancelButton: true,
+        })
+        .then(async (result) => {
+          if (result.isConfirmed) {
+            this.deleteTodo(this.getSelectedTodosToDelete);
+          }
+        });
     },
   },
   mounted() {

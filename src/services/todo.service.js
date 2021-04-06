@@ -12,7 +12,10 @@ function createTodo(todo) {
 }
 
 function deleteTodo(id) {
-  return axios.delete(`${TODO_PATH}/${id}`);
+  if (id) {
+    const results = id.map((res) => axios.delete(`${TODO_PATH}/${res}`));
+    return Promise.all(results);
+  }
 }
 
 function updateTodo(todo) {

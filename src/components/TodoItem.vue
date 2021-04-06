@@ -1,5 +1,11 @@
 <template>
   <div class="row my-4 justify-content-center align-items-center">
+    <input
+      type="checkbox"
+      :disabled="isLoading || getError"
+      @click="selectTodos(todo.id)"
+      :checked="getSelectedTodosToDelete.includes(todo.id)"
+    />
     <div class="col-7 col-lg-4 item mx-2">
       <div
         v-if="!isSelectedToEdit(todo)"
@@ -56,7 +62,10 @@ export default {
   },
   computed: {
     ...mapGetters("loader", ["isLoading", "getError"]),
-    ...mapGetters("todo", ["getSelectedTodo"]),
+    ...mapGetters("todo", [
+      "getSelectedTodoToEdit",
+      "getSelectedTodosToDelete",
+    ]),
   },
   methods: {
     ...mapActions("todo", [
@@ -64,9 +73,10 @@ export default {
       "updateTodo",
       "updateStatusTodo",
       "selectTodo",
+      "selectTodos",
     ]),
     isSelectedToEdit(todo) {
-      return todo.id === this.getSelectedTodo;
+      return todo.id === this.getSelectedTodoToEdit;
     },
     handleEdit(todo) {
       if (this.isSelectedToEdit(todo)) {
@@ -107,7 +117,7 @@ export default {
           })
           .then(async (result) => {
             if (result.isConfirmed) {
-              this.deleteTodo(todo.id);
+              this.deleteTodo([todo.id]);
             }
           });
       }
