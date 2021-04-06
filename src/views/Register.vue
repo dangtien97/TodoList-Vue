@@ -38,9 +38,7 @@
           <div class="form-group">
             <button
               class="btn btn-primary btn-block"
-              :disabled="
-                isLoading || errors.has('username') || errors.has('password')
-              "
+              :disabled="errors.has('username') || errors.has('password')"
             >
               <span
                 v-show="isLoading"

@@ -2,7 +2,6 @@
   <div class="row my-4 justify-content-center align-items-center">
     <input
       type="checkbox"
-      :disabled="isLoading || getError"
       @click="selectTodos(todo.id)"
       :checked="getSelectedTodosToDelete.includes(todo.id)"
     />
@@ -20,7 +19,6 @@
           type="checkbox"
           @click="handleStatus(todo)"
           :checked="todo.status === 'completed'"
-          :disabled="isLoading || getError"
         />
       </div>
       <input v-else type="text" class="form-control" v-model="editText" />
@@ -29,19 +27,12 @@
       @click="handleEdit(todo)"
       class="btn btn-success"
       :disabled="
-        todo.status === 'completed' ||
-          isLoading ||
-          getError ||
-          (isSelectedToEdit(todo) && !editText)
+        todo.status === 'completed' || (isSelectedToEdit(todo) && !editText)
       "
     >
       {{ isSelectedToEdit(todo) ? "Update" : "Edit" }}
     </button>
-    <button
-      @click="handleDelete(todo)"
-      class="btn btn-danger ml-1"
-      :disabled="isLoading || getError"
-    >
+    <button @click="handleDelete(todo)" class="btn btn-danger ml-1">
       {{ isSelectedToEdit(todo) ? "Cancel" : " Delete" }}
     </button>
   </div>
@@ -61,7 +52,6 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("loader", ["isLoading", "getError"]),
     ...mapGetters("todo", [
       "getSelectedTodoToEdit",
       "getSelectedTodosToDelete",

@@ -30,7 +30,7 @@
         </li>
       </div>
     </nav>
-    <main>
+    <main :style="isLoading ? { pointerEvents: 'none', opacity: '0.7' } : {}">
       <slot />
     </main>
   </div>
@@ -41,6 +41,7 @@ import { mapGetters } from "vuex";
 export default {
   computed: {
     ...mapGetters("user", ["getUser"]),
+    ...mapGetters("loader", ["isLoading"]),
   },
   methods: {
     logOut() {

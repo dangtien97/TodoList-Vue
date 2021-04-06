@@ -3,7 +3,6 @@
     <form class="form-inline justify-content-center mb-4">
       <input
         v-model="todoText"
-        :disabled="isLoading || getError"
         type="text"
         class="form-control col-6 col-sm-6 col-lg-4 mx-3"
         placeholder="Add task here"
@@ -11,7 +10,7 @@
       <button
         @click.prevent="handleAdd"
         class="btn btn-primary col-4 col-sm-2 col-lg-1"
-        :disabled="isLoading || getError || !todoText"
+        :disabled="!todoText"
       >
         Add Todo
       </button>
@@ -19,7 +18,6 @@
     <form class="form-inline justify-content-center mb-4">
       <input
         @input="handleSearch"
-        :disabled="isLoading || getError"
         type="text"
         class="form-control col-10 col-sm-6 col-lg-4"
         placeholder="You can search here"
@@ -29,7 +27,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapActions } from "vuex";
 
 export default {
   name: "TodoInput",
@@ -38,9 +36,6 @@ export default {
       todoText: "",
       searchText: "",
     };
-  },
-  computed: {
-    ...mapGetters("loader", ["isLoading", "getError"]),
   },
   methods: {
     ...mapActions("todo", ["createTodo", "searchTodo", "selectTodo"]),

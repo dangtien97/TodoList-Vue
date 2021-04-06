@@ -16,14 +16,13 @@
     <div class="row justify-content-center col-xs-12 col-10 align-items-center">
       <input
         type="checkbox"
-        :disabled="isLoading || getError"
         :checked="this.getTodos.length === this.getSelectedTodosToDelete.length"
         @click="selectTodos('all')"
       />
       <button
         class="btn btn-danger mx-2"
         @click="handleDeleteTodos"
-        :disabled="isLoading || getError || getSelectedTodosToDelete.length < 1"
+        :disabled="getSelectedTodosToDelete.length < 1"
       >
         Delete Tasks
       </button>
