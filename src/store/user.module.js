@@ -1,4 +1,4 @@
-import UserService from "../services/user.service";
+import UserService from "@/services/user.service";
 
 const SET_LOGIN_SUCCESS = "SET_LOGIN_SUCCESS";
 const SET_LOGOUT = "SET_LOGOUT";

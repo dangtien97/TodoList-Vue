@@ -25,6 +25,7 @@ instance.interceptors.request.use(
         ? error.response.data.message
         : error.message
     );
+    return Promise.reject(error);
   }
 );
 
@@ -46,6 +47,7 @@ instance.interceptors.response.use(
         ? error.response.data.message
         : error.message
     );
+    return Promise.reject(error);
   }
 );
 

@@ -1,9 +1,9 @@
 import Vue from "vue";
 import Vuex from "vuex";
 
-import { user } from "./user.module";
-import { todo } from "./todo.module";
-import { loader } from "./loader.module";
+import { user } from "@/store/user.module";
+import { todo } from "@/store/todo.module";
+import { loader } from "@/store/loader.module";
 
 Vue.use(Vuex);
 

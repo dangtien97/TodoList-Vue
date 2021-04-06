@@ -1,7 +1,7 @@
 import Vue from "vue";
-import App from "./App.vue";
-import { router } from "./router";
-import store from "./store";
+import App from "@/App.vue";
+import { router } from "@/router";
+import store from "@/store";
 import "bootstrap/dist/css/bootstrap.css";
 import VeeValidate from "vee-validate";
 import VueSweetalert2 from "vue-sweetalert2";
