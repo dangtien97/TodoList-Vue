@@ -44,7 +44,7 @@ export default {
       "getSearchFilter",
       "getTodos",
       "getDoneTodo",
-      "isTodoAvailable",
+      "isCanFetchMoreTodos",
     ]),
     ...mapGetters("loader", ["isLoading", "getError"]),
     currentUser() {
@@ -53,7 +53,7 @@ export default {
   },
   methods: {
     async loadMore() {
-      if (!this.isTodoAvailable) return;
+      if (!this.isCanFetchMoreTodos) return;
       await this.$store.dispatch("todo/fetchTodos", {
         page: ++this.page,
         limit: 10,

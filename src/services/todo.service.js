@@ -4,10 +4,7 @@ const TODO_PATH = "/api/todos";
 
 async function getTodos(id, limit) {
   const response = await axios.get(`${TODO_PATH}?page=${id}&limit=${limit}`);
-  const result = response.items.sort(
-    (a, b) => new Date(a.created_at) - new Date(b.created_at)
-  );
-  return result;
+  return response.items;
 }
 
 function createTodo(todo) {

@@ -15,18 +15,18 @@ export const todo = {
     data: [],
     search: "",
     selectedTodo: null,
-    todoAvailable: true,
+    isCanFetchMoreTodos: true,
   },
   getters: {
     getTodos: (state) => state.data,
     getDoneTodo: (state) =>
-      state.data.filter((todo) => todo.status == "completed"),
+      state.data.filter((todo) => todo.status === "completed"),
     getSearchFilter: (state) =>
       state.data.filter((todo) =>
         todo.content.toLowerCase().includes(state.search.toLowerCase())
       ),
     getSelectedTodo: (state) => state.selectedTodo,
-    isTodoAvailable: (state) => state.todoAvailable,
+    isCanFetchMoreTodos: (state) => state.isCanFetchMoreTodos,
   },
   actions: {
     async fetchTodos({ commit, rootState }, { page, limit }) {
@@ -67,12 +67,12 @@ export const todo = {
       if (todos.length) {
         rootState.todo.data = rootState.todo.data.concat(todos);
       } else {
-        state.todoAvailable = false;
+        state.isCanFetchMoreTodos = false;
       }
     },
     [ADD_TODO](state, todo) {
       if (todo.content) {
-        state.data.push(todo);
+        state.data.unshift(todo);
       }
     },
     [DELETE_TODO](state, id) {
