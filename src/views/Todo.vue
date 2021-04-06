@@ -13,10 +13,14 @@
       <p class="detail error" v-if="getError">{{ getError }}</p>
     </div>
     <todo-input />
-    <div>
+    <div id="todo-list">
       <div class="todo-item" v-for="todo in getSearchFilter" :key="todo.id">
         <todo-item :todo="todo" />
       </div>
+    </div>
+    <div class="loading mb-4" v-show="isLoading">
+      <span class="spinner-border spinner-border-sm"></span>
+      Loading...
     </div>
   </layout-default>
 </template>
@@ -30,15 +34,42 @@ import LayoutDefault from "@/layout/LayoutDefault.vue";
 export default {
   components: { TodoInput, TodoItem, LayoutDefault },
   name: "Todo",
+  data() {
+    return {
+      page: 1,
+    };
+  },
   computed: {
-    ...mapGetters("todo", ["getSearchFilter", "getTodos", "getDoneTodo"]),
-    ...mapGetters("loader", ["getError"]),
+    ...mapGetters("todo", [
+      "getSearchFilter",
+      "getTodos",
+      "getDoneTodo",
+      "isTodoAvailable",
+    ]),
+    ...mapGetters("loader", ["isLoading", "getError"]),
     currentUser() {
       return this.$store.state.user.user;
     },
   },
+  methods: {
+    async loadMore() {
+      if (!this.isTodoAvailable) return;
+      await this.$store.dispatch("todo/fetchTodos", {
+        page: ++this.page,
+        limit: 10,
+      });
+    },
+  },
   mounted() {
-    this.$store.dispatch("todo/fetchTodos");
+    this.$store.dispatch("todo/fetchTodos", {
+      page: 1,
+      limit: 10,
+    });
+    window.addEventListener("scroll", () => {
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+        this.loadMore();
+      }
+    });
   },
 };
 </script>

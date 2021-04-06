@@ -15,6 +15,7 @@ export const todo = {
     data: [],
     search: "",
     selectedTodo: null,
+    todoAvailable: true,
   },
   getters: {
     getTodos: (state) => state.data,
@@ -25,10 +26,11 @@ export const todo = {
         todo.content.toLowerCase().includes(state.search.toLowerCase())
       ),
     getSelectedTodo: (state) => state.selectedTodo,
+    isTodoAvailable: (state) => state.todoAvailable,
   },
   actions: {
-    async fetchTodos({ commit, rootState }) {
-      const todos = await TodoService.getTodos();
+    async fetchTodos({ commit, rootState }, { page, limit }) {
+      const todos = await TodoService.getTodos(page, limit);
       commit(SET_TODOS, {
         todos,
         rootState,
@@ -61,8 +63,12 @@ export const todo = {
     },
   },
   mutations: {
-    [SET_TODOS](_state, { todos, rootState }) {
-      rootState.todo.data = todos;
+    [SET_TODOS](state, { todos, rootState }) {
+      if (todos.length) {
+        rootState.todo.data = rootState.todo.data.concat(todos);
+      } else {
+        state.todoAvailable = false;
+      }
     },
     [ADD_TODO](state, todo) {
       if (todo.content) {

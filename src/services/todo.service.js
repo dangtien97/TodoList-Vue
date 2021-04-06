@@ -2,9 +2,9 @@ import axios from "@/lib/axios/axios";
 
 const TODO_PATH = "/api/todos";
 
-async function getTodos() {
-  const response = await axios.get(TODO_PATH);
-  const result = response.sort(
+async function getTodos(id, limit) {
+  const response = await axios.get(`${TODO_PATH}?page=${id}&limit=${limit}`);
+  const result = response.items.sort(
     (a, b) => new Date(a.created_at) - new Date(b.created_at)
   );
   return result;

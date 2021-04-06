@@ -135,4 +135,8 @@ export default {
 .content {
   max-width: 70%;
 }
+.row {
+  margin-left: 0;
+  margin-right: 0;
+}
 </style>
