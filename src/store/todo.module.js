@@ -4,7 +4,6 @@ const SET_TODOS = "SET_TODOS";
 const ADD_TODO = "ADD_TODO";
 const DELETE_TODO = "DELETE_TODO";
 const UPDATE_TODO = "UPDATE_TODO";
-const UPDATE_STATUS_TODO = "UPDATE_STATUS_TODO";
 const SET_SELECTED_TODO = "SET_SELECTED_TODO";
 const SET_SELECTED_TODOS = "SET_SELECTED_TODOS";
 const SET_SEARCH_TODO = "SET_SEARCH_TODO";
@@ -48,10 +47,6 @@ export const todo = {
       const response = await TodoService.updateTodo(todo);
       commit(UPDATE_TODO, response);
     },
-    async updateStatusTodo({ commit }, todo) {
-      const response = await TodoService.updateTodo(todo);
-      commit(UPDATE_STATUS_TODO, response);
-    },
     selectTodo({ commit }, id) {
       commit(SET_SELECTED_TODO, id);
     },
@@ -90,10 +85,6 @@ export const todo = {
       let index = state.data.findIndex((todo) => todo.id === todoEdited.id);
       state.data.splice(index, 1, todoEdited);
       state.selectedTodoToEdit = null;
-    },
-    [UPDATE_STATUS_TODO](state, todo) {
-      let index = state.data.findIndex((item) => item.id === todo.id);
-      state.data.splice(index, 1, todo);
     },
     [SET_SEARCH_TODO](state, searchText) {
       state.search = searchText;

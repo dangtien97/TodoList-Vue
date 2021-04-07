@@ -61,7 +61,6 @@ export default {
     ...mapActions("todo", [
       "deleteTodo",
       "updateTodo",
-      "updateStatusTodo",
       "selectTodo",
       "selectTodos",
     ]),
@@ -84,7 +83,7 @@ export default {
       }
     },
     handleStatus(todo) {
-      this.updateStatusTodo({
+      this.updateTodo({
         id: todo.id,
         content: todo.content,
         status: todo.status === "active" ? "completed" : "active",

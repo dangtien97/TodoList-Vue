@@ -1,7 +1,6 @@
 import UserService from "@/services/user.service";
 
-const SET_LOGIN_SUCCESS = "SET_LOGIN_SUCCESS";
-const SET_LOGOUT = "SET_LOGOUT";
+const SET_USER = "SET_USER";
 
 const userInLocalStorage = JSON.parse(localStorage.getItem("user"));
 const initialState = userInLocalStorage
@@ -15,23 +14,20 @@ export const user = {
   actions: {
     async login({ commit }, user) {
       const response = await UserService.login(user);
-      commit(SET_LOGIN_SUCCESS, response);
+      commit(SET_USER, response);
       return response.data;
     },
     logout({ commit }) {
       UserService.logout();
-      commit(SET_LOGOUT);
+      commit(SET_USER, null);
     },
     async register(_, user) {
       await UserService.register(user);
     },
   },
   mutations: {
-    [SET_LOGIN_SUCCESS](state, user) {
-      state.user = user;
-    },
-    [SET_LOGOUT](state) {
-      state.user = null;
+    [SET_USER](state, payload) {
+      state.user = payload;
     },
   },
 };
