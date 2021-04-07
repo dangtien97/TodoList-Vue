@@ -68,7 +68,7 @@ export default {
   methods: {
     ...mapActions("todo", ["deleteTodo", "selectTodosToDelete"]),
     async loadMore() {
-      if (!this.isCanFetchMoreTodos) return;
+      if (this.isLoading || !this.isCanFetchMoreTodos) return;
       await this.$store.dispatch("todo/fetchTodos", {
         page: ++this.page,
         limit: 10,
@@ -95,7 +95,7 @@ export default {
       limit: 10,
     });
     window.addEventListener("scroll", () => {
-      if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+      if (window.innerHeight + window.scrollY >= document.body.scrollHeight) {
         this.loadMore();
       }
     });
