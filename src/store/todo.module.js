@@ -4,18 +4,18 @@ const SET_TODOS = "SET_TODOS";
 const ADD_TODO = "ADD_TODO";
 const DELETE_TODO = "DELETE_TODO";
 const UPDATE_TODO = "UPDATE_TODO";
-const SET_SELECTED_TODO = "SET_SELECTED_TODO";
-const SET_SELECTED_TODOS = "SET_SELECTED_TODOS";
+const SET_EDITING_TODO = "SET_EDITING_TODO";
+const SET_DELETING_TODOS = "SET_DELETING_TODOS";
 const SET_SEARCH_TODO = "SET_SEARCH_TODO";
-const CLEAR_TODOS = "CLEAR_TODOS";
+const REMOVE_TODOS = "REMOVE_TODOS";
 
 export const todo = {
   namespaced: true,
   state: {
     data: [],
     search: "",
-    selectedTodoToEdit: null,
-    selectedTodosToDelete: [],
+    editingTodo: null,
+    deletingTodos: [],
     isCanFetchMoreTodos: true,
   },
   getters: {
@@ -26,8 +26,8 @@ export const todo = {
       state.data.filter((todo) =>
         todo.content.toLowerCase().includes(state.search.toLowerCase())
       ),
-    getSelectedTodoToEdit: (state) => state.selectedTodoToEdit,
-    getSelectedTodosToDelete: (state) => state.selectedTodosToDelete,
+    getEditingTodo: (state) => state.editingTodo,
+    getDeletingTodos: (state) => state.deletingTodos,
     isCanFetchMoreTodos: (state) => state.isCanFetchMoreTodos,
   },
   actions: {
@@ -47,24 +47,23 @@ export const todo = {
       const response = await TodoService.updateTodo(todo);
       commit(UPDATE_TODO, response);
     },
-    selectTodo({ commit }, id) {
-      commit(SET_SELECTED_TODO, id);
+    selectTodoToEdit({ commit }, id) {
+      commit(SET_EDITING_TODO, id);
     },
-    selectTodos({ commit }, id) {
-      commit(SET_SELECTED_TODOS, id);
+    selectTodosToDelete({ commit }, todoIds) {
+      commit(SET_DELETING_TODOS, todoIds);
     },
     searchTodo({ commit }, searchText) {
       commit(SET_SEARCH_TODO, searchText);
     },
-    clearTodo({ commit }) {
-      commit(CLEAR_TODOS);
+    removeTodos({ commit }) {
+      commit(REMOVE_TODOS);
     },
   },
   mutations: {
     [SET_TODOS](state, todos) {
       if (todos.length) {
         state.data.push(...todos);
-        state.selectedTodosToDelete = [];
       } else {
         state.isCanFetchMoreTodos = false;
       }
@@ -79,35 +78,34 @@ export const todo = {
         let index = state.data.findIndex((todo) => todo.id === res);
         state.data.splice(index, 1);
       });
-      state.selectedTodosToDelete = [];
+      state.deletingTodos = [];
     },
     [UPDATE_TODO](state, todoEdited) {
       let index = state.data.findIndex((todo) => todo.id === todoEdited.id);
       state.data.splice(index, 1, todoEdited);
-      state.selectedTodoToEdit = null;
+      state.editingTodo = null;
     },
     [SET_SEARCH_TODO](state, searchText) {
       state.search = searchText;
     },
-    [SET_SELECTED_TODO](state, id) {
-      state.selectedTodoToEdit = id;
+    [SET_EDITING_TODO](state, id) {
+      state.editingTodo = id;
     },
-    [SET_SELECTED_TODOS](state, id) {
-      if (id === "all") {
-        if (state.selectedTodosToDelete.length === state.data.length) {
-          state.selectedTodosToDelete = [];
-        } else {
-          state.selectedTodosToDelete = [];
-          state.data.map((todo) => state.selectedTodosToDelete.push(todo.id));
+    [SET_DELETING_TODOS](state, todoIds) {
+      if (todoIds.length === state.data.length) {
+        if (state.deletingTodos.length === state.data.length)
+          state.deletingTodos = [];
+        else {
+          state.deletingTodos = [];
+          todoIds.map((id) => state.deletingTodos.push(id));
         }
       } else {
-        let index = state.selectedTodosToDelete.findIndex((res) => res === id);
-        if (index >= 0) {
-          state.selectedTodosToDelete.splice(index, 1);
-        } else state.selectedTodosToDelete.push(id);
+        let index = state.deletingTodos.findIndex((res) => res === todoIds[0]);
+        if (index >= 0) state.deletingTodos.splice(index, 1);
+        else state.deletingTodos.push(todoIds[0]);
       }
     },
-    [CLEAR_TODOS](state) {
+    [REMOVE_TODOS](state) {
       state.data.splice(0);
       state.error = null;
     },

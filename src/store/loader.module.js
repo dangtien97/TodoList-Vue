@@ -1,6 +1,6 @@
 const SET_LOADING_STATUS = "SET_LOADING_STATUS";
 const SET_ERROR_REQUEST = "SET_ERROR_REQUEST";
-const CLEAR_ERROR_REQUEST = "CLEAR_ERROR_REQUEST";
+const REMOVE_ERROR_REQUEST = "REMOVE_ERROR_REQUEST";
 
 export const loader = {
   namespaced: true,
@@ -22,8 +22,8 @@ export const loader = {
     endRequest({ commit }) {
       commit(SET_LOADING_STATUS, false);
     },
-    clearError({ commit }) {
-      commit(CLEAR_ERROR_REQUEST);
+    removeError({ commit }) {
+      commit(REMOVE_ERROR_REQUEST);
     },
   },
   mutations: {
@@ -34,7 +34,7 @@ export const loader = {
       state.error = error;
       state.isLoading = false;
     },
-    [CLEAR_ERROR_REQUEST](state) {
+    [REMOVE_ERROR_REQUEST](state) {
       state.error = null;
     },
   },

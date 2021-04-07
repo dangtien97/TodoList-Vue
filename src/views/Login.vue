@@ -84,7 +84,7 @@ export default {
     ...mapGetters("loader", ["isLoading", "getError"]),
   },
   methods: {
-    ...mapActions("loader", ["clearError", "setError"]),
+    ...mapActions("loader", ["removeError", "setError"]),
     ...mapActions("user", ["login"]),
 
     displayValidationsErrors(errors, fieldName) {
@@ -92,11 +92,11 @@ export default {
     },
 
     async handleLogin() {
-      this.clearError();
+      this.removeError();
       const isValid = await this.$validator.validate();
       if (isValid) {
         await this.login(this.user);
-        this.clearError();
+        this.removeError();
         this.$router.push("/");
       }
     },

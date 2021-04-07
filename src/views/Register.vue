@@ -76,14 +76,14 @@ export default {
   },
   methods: {
     ...mapActions("user", ["register"]),
-    ...mapActions("loader", ["clearError", "setError"]),
+    ...mapActions("loader", ["removeError", "setError"]),
 
     displayValidationsErrors(errors, fieldName) {
       return getValidationsErrors(errors, fieldName);
     },
 
     async handleRegister() {
-      this.clearError();
+      this.removeError();
       const isValid = await this.$validator.validate();
       if (isValid) {
         await this.register(this.user);

@@ -2,8 +2,8 @@
   <div class="row my-4 justify-content-center align-items-center">
     <input
       type="checkbox"
-      @click="selectTodos(todo.id)"
-      :checked="getSelectedTodosToDelete.includes(todo.id)"
+      @click="selectTodosToDelete([todo.id])"
+      :checked="getDeletingTodos.includes(todo.id)"
     />
     <div class="col-7 col-lg-4 item mx-2">
       <div
@@ -52,20 +52,17 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("todo", [
-      "getSelectedTodoToEdit",
-      "getSelectedTodosToDelete",
-    ]),
+    ...mapGetters("todo", ["getEditingTodo", "getDeletingTodos"]),
   },
   methods: {
     ...mapActions("todo", [
       "deleteTodo",
       "updateTodo",
-      "selectTodo",
-      "selectTodos",
+      "selectTodoToEdit",
+      "selectTodosToDelete",
     ]),
     isSelectedToEdit(todo) {
-      return todo.id === this.getSelectedTodoToEdit;
+      return todo.id === this.getEditingTodo;
     },
     handleEdit(todo) {
       if (this.isSelectedToEdit(todo)) {
@@ -75,10 +72,10 @@ export default {
           content: this.editText,
           status: "active",
         });
-        this.selectTodo(null);
+        this.selectTodoToEdit(null);
       } else {
         // select todo to edit
-        this.selectTodo(todo.id);
+        this.selectTodoToEdit(todo.id);
         this.editText = this.todo.content;
       }
     },
@@ -94,7 +91,7 @@ export default {
         // cancel edit
         // this.isSelectedToEdit(todo) = false;
         this.editText = this.todo.content;
-        this.selectTodo(null);
+        this.selectTodoToEdit(null);
       } else {
         // delete
         this.$swal

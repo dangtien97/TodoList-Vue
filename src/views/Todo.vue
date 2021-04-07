@@ -16,17 +16,17 @@
     <div class="row justify-content-center col-xs-12 col-10 align-items-center">
       <input
         type="checkbox"
-        :checked="this.getTodos.length === this.getSelectedTodosToDelete.length"
-        @click="selectTodos('all')"
+        :checked="this.getTodos.length === this.getDeletingTodos.length"
+        @click="selectTodosToDelete(getTodos.map((todo) => todo.id))"
       />
       <button
         class="btn btn-danger mx-2"
         @click="handleDeleteTodos"
-        :disabled="getSelectedTodosToDelete.length < 1"
+        :disabled="getDeletingTodos.length < 1"
       >
         Delete Tasks
       </button>
-      <p class="detail all ">Selected: {{ getSelectedTodosToDelete.length }}</p>
+      <p class="detail all ">Selected: {{ getDeletingTodos.length }}</p>
     </div>
     <div id="todo-list">
       <div class="todo-item" v-for="todo in getSearchFilter" :key="todo.id">
@@ -60,13 +60,13 @@ export default {
       "getTodos",
       "getDoneTodo",
       "isCanFetchMoreTodos",
-      "getSelectedTodosToDelete",
+      "getDeletingTodos",
     ]),
     ...mapGetters("loader", ["isLoading", "getError"]),
     ...mapGetters("user", ["getUser"]),
   },
   methods: {
-    ...mapActions("todo", ["deleteTodo", "selectTodos"]),
+    ...mapActions("todo", ["deleteTodo", "selectTodosToDelete"]),
     async loadMore() {
       if (!this.isCanFetchMoreTodos) return;
       await this.$store.dispatch("todo/fetchTodos", {
@@ -84,7 +84,7 @@ export default {
         })
         .then(async (result) => {
           if (result.isConfirmed) {
-            this.deleteTodo(this.getSelectedTodosToDelete);
+            this.deleteTodo(this.getDeletingTodos);
           }
         });
     },

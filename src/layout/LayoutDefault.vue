@@ -46,7 +46,7 @@ export default {
   methods: {
     logOut() {
       this.$store.dispatch("user/logout");
-      this.$store.dispatch("todo/clearTodo");
+      this.$store.dispatch("todo/removeTodos");
       this.$router.push("/login");
     },
   },

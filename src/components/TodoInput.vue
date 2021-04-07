@@ -38,9 +38,9 @@ export default {
     };
   },
   methods: {
-    ...mapActions("todo", ["createTodo", "searchTodo", "selectTodo"]),
+    ...mapActions("todo", ["createTodo", "searchTodo", "selectTodoToEdit"]),
     handleAdd() {
-      this.selectTodo(null);
+      this.selectTodoToEdit(null);
       this.createTodo({
         content: this.todoText,
       });
