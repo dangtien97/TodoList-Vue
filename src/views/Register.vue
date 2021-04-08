@@ -75,7 +75,6 @@ export default {
     ...mapActions("loader", ["removeError", "setError"]),
 
     async handleRegister() {
-      this.removeError();
       const isValid = await this.$validator.validate();
       if (isValid) {
         await this.register(this.user);

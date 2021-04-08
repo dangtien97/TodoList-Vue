@@ -9,6 +9,7 @@ const instance = axios.create({
 instance.interceptors.request.use(
   (config) => {
     // Do something before request is sent
+    store.dispatch("loader/removeError");
     store.dispatch("loader/sendRequest");
     const user = localStorage.getItem("user");
     if (user) {

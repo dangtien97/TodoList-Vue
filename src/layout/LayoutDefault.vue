@@ -47,6 +47,7 @@ export default {
     logOut() {
       this.$store.dispatch("user/logout");
       this.$store.dispatch("todo/removeTodos");
+      this.$store.dispatch("loader/removeError");
       this.$router.push("/login");
     },
   },

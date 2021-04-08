@@ -76,11 +76,9 @@ export default {
     ...mapActions("user", ["login"]),
 
     async handleLogin() {
-      this.removeError();
       const isValid = await this.$validator.validate();
       if (isValid) {
         await this.login(this.user);
-        this.removeError();
         this.$router.push("/");
       }
     },
