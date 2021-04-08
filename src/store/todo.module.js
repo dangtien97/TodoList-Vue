@@ -39,9 +39,9 @@ export const todo = {
       const response = await TodoService.createTodo(todo);
       commit(ADD_TODO, response);
     },
-    async deleteTodo({ commit }, id) {
-      await TodoService.deleteTodo(id);
-      commit(DELETE_TODO, id);
+    async deleteTodo({ commit }, todoIds) {
+      await TodoService.deleteTodoList(todoIds);
+      commit(DELETE_TODO, todoIds);
     },
     async updateTodo({ commit }, todo) {
       const response = await TodoService.updateTodo(todo);

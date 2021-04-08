@@ -66,7 +66,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import { getValidationsErrors } from "@/utils/vee-validate/getError";
+import { getValidationsErrors } from "@/utils";
 import LayoutDefault from "@/layout/LayoutDefault.vue";
 
 export default {
