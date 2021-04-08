@@ -72,7 +72,7 @@ export default {
   },
   methods: {
     ...mapActions("user", ["register"]),
-    ...mapActions("loader", ["removeError", "setError"]),
+    ...mapActions("loader", ["removeError"]),
 
     async handleRegister() {
       const isValid = await this.$validator.validate();

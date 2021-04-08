@@ -5,11 +5,14 @@ const instance = axios.create({
   baseURL: process.env.VUE_APP_API_URL,
 });
 
-// Add a request interceptor
+function getAxiosErrorMessage(error) {
+  return error.response && error.response.data.message
+    ? error.response.data.message
+    : error.message;
+}
+
 instance.interceptors.request.use(
   (config) => {
-    // Do something before request is sent
-    store.dispatch("loader/removeError");
     store.dispatch("loader/sendRequest");
     const user = localStorage.getItem("user");
     if (user) {
@@ -19,35 +22,18 @@ instance.interceptors.request.use(
     return config;
   },
   (error) => {
-    // Do something with request error
-    store.dispatch(
-      "loader/setError",
-      error.response && error.response.data.message
-        ? error.response.data.message
-        : error.message
-    );
+    store.dispatch("loader/setErrorHttp", getAxiosErrorMessage(error));
     return Promise.reject(error);
   }
 );
 
-// Add a response interceptor
 instance.interceptors.response.use(
-  function(response) {
-    // Any status code that lie within the range of 2xx cause this function to trigger
-    // Do something with response data
-    // store.commit("loader/END_REQUEST");
-    store.dispatch("loader/endRequest");
+  (response) => {
+    store.dispatch("loader/setSuccessResponse");
     return response.data;
   },
-  function(error) {
-    // Any status codes that falls outside the range of 2xx cause this function to trigger
-    // Do something with response error
-    store.dispatch(
-      "loader/setError",
-      error.response && error.response.data.message
-        ? error.response.data.message
-        : error.message
-    );
+  (error) => {
+    store.dispatch("loader/setErrorHttp", getAxiosErrorMessage(error));
     return Promise.reject(error);
   }
 );

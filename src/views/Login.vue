@@ -72,7 +72,7 @@ export default {
     ...mapGetters("loader", ["isLoading", "getError"]),
   },
   methods: {
-    ...mapActions("loader", ["removeError", "setError"]),
+    ...mapActions("loader", ["removeError"]),
     ...mapActions("user", ["login"]),
 
     async handleLogin() {

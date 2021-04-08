@@ -14,13 +14,15 @@ export const loader = {
   },
   actions: {
     sendRequest({ commit }) {
+      commit(REMOVE_ERROR);
       commit(SET_IS_LOADING, true);
     },
-    setError({ commit }, error) {
-      commit(SET_ERROR, error);
+    setSuccessResponse({ commit }) {
       commit(SET_IS_LOADING, false);
     },
-    endRequest({ commit }) {
+    // For both error request and error response
+    setErrorHttp({ commit }, error) {
+      commit(SET_ERROR, error);
       commit(SET_IS_LOADING, false);
     },
     removeError({ commit }) {
