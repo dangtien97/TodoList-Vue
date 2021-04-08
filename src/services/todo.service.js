@@ -20,7 +20,7 @@ function deleteTodoList(todoIds) {
   return lazyBatchesPromise({
     asyncFactoryFunction: deleteTodo,
     items: todoIds,
-    batchSize: 10,
+    batchSize: 5,
     delay: 200,
   });
 }

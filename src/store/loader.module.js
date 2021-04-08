@@ -1,6 +1,6 @@
-const SET_LOADING_STATUS = "SET_LOADING_STATUS";
-const SET_ERROR_REQUEST = "SET_ERROR_REQUEST";
-const REMOVE_ERROR_REQUEST = "REMOVE_ERROR_REQUEST";
+const SET_IS_LOADING = "SET_IS_LOADING";
+const SET_ERROR = "SET_ERROR";
+const REMOVE_ERROR = "REMOVE_ERROR";
 
 export const loader = {
   namespaced: true,
@@ -14,27 +14,27 @@ export const loader = {
   },
   actions: {
     sendRequest({ commit }) {
-      commit(SET_LOADING_STATUS, true);
+      commit(SET_IS_LOADING, true);
     },
     setError({ commit }, error) {
-      commit(SET_ERROR_REQUEST, error);
+      commit(SET_ERROR, error);
+      commit(SET_IS_LOADING, false);
     },
     endRequest({ commit }) {
-      commit(SET_LOADING_STATUS, false);
+      commit(SET_IS_LOADING, false);
     },
     removeError({ commit }) {
-      commit(REMOVE_ERROR_REQUEST);
+      commit(REMOVE_ERROR);
     },
   },
   mutations: {
-    [SET_LOADING_STATUS](state, payload) {
+    [SET_IS_LOADING](state, payload) {
       state.isLoading = payload;
     },
-    [SET_ERROR_REQUEST](state, error) {
+    [SET_ERROR](state, error) {
       state.error = error;
-      state.isLoading = false;
     },
-    [REMOVE_ERROR_REQUEST](state) {
+    [REMOVE_ERROR](state) {
       state.error = null;
     },
   },

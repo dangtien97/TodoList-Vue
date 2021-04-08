@@ -84,7 +84,17 @@ export default {
         })
         .then(async (result) => {
           if (result.isConfirmed) {
-            this.deleteTodo(this.getDeletingTodos);
+            await this.deleteTodo(this.getDeletingTodos);
+            this.$swal.fire({
+              position: "top-end",
+              icon: "success",
+              title: "Done",
+              showConfirmButton: false,
+              timer: 1000,
+            });
+            if (this.getTodos.length < 10) {
+              this.loadMore();
+            }
           }
         });
     },
