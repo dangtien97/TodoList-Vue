@@ -17,13 +17,7 @@
             class="form-control"
             name="username"
           />
-          <div
-            v-if="errors.has('username')"
-            class="alert alert-danger"
-            role="alert"
-          >
-            {{ displayValidationsErrors(errors, "username") }}
-          </div>
+          <error-validation fieldName="username" :error="errors" />
         </div>
         <div class="form-group">
           <label for="password">Password</label>
@@ -34,13 +28,7 @@
             class="form-control"
             name="password"
           />
-          <div
-            v-if="errors.has('password')"
-            class="alert alert-danger"
-            role="alert"
-          >
-            {{ displayValidationsErrors(errors, "password") }}
-          </div>
+          <error-validation fieldName="password" :error="errors" />
         </div>
         <div class="form-group">
           <button
@@ -66,11 +54,11 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import { getValidationsErrors } from "@/utils";
 import LayoutDefault from "@/layout/LayoutDefault.vue";
+import ErrorValidation from "@/components/ErrorValidation.vue";
 
 export default {
-  components: { LayoutDefault },
+  components: { LayoutDefault, ErrorValidation },
   name: "Login",
   data() {
     return {
@@ -86,10 +74,6 @@ export default {
   methods: {
     ...mapActions("loader", ["removeError", "setError"]),
     ...mapActions("user", ["login"]),
-
-    displayValidationsErrors(errors, fieldName) {
-      return getValidationsErrors(errors, fieldName);
-    },
 
     async handleLogin() {
       this.removeError();
