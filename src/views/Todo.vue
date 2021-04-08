@@ -93,7 +93,10 @@ export default {
               timer: 1000,
             });
             if (this.getTodos.length < 10) {
-              this.loadMore();
+              this.$store.dispatch("todo/fetchTodos", {
+                page: 1,
+                limit: 10,
+              });
             }
           }
         });
