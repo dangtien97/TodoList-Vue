@@ -5,13 +5,13 @@
 </template>
 
 <script>
-import errorMixins from "@/mixins/errorMixins";
+import ErrorMixins from "@/mixins/ErrorMixins";
 export default {
   props: {
     fieldName: String,
     error: {},
   },
-  mixins: [errorMixins],
+  mixins: [ErrorMixins],
 };
 </script>
 

@@ -62,14 +62,6 @@ export const todo = {
   },
   mutations: {
     [SET_TODOS](state, { todos, page }) {
-      // if(todos.length && page === 1) {
-      //   state.data = [];
-      //   state.data.push(...todos);
-      // } else if(todos.length && page !== 1) {
-      //   state.data.push(...todos);
-      // } else {
-      //   state.isCanFetchMoreTodos = false;
-      // }
       if (todos.length) {
         if (page === 1) state.data = [];
         state.data.push(...todos);
