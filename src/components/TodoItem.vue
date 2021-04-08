@@ -17,7 +17,7 @@
         </span>
         <input
           type="checkbox"
-          @click="handleStatus(todo)"
+          @click="changeTodoStatus(todo)"
           :checked="todo.status === 'completed'"
         />
       </div>
@@ -45,7 +45,7 @@ export default {
   props: {
     todo: {},
   },
-  data: function() {
+  data() {
     return {
       editText: this.todo.content,
       created: this.todo.created_at,
@@ -79,14 +79,14 @@ export default {
         this.editText = this.todo.content;
       }
     },
-    handleStatus(todo) {
+    changeTodoStatus(todo) {
       this.updateTodo({
         id: todo.id,
         content: todo.content,
         status: todo.status === "active" ? "completed" : "active",
       });
     },
-    handleDelete(todo) {
+    async handleDelete(todo) {
       if (this.isSelectedToEdit(todo)) {
         // cancel edit
         // this.isSelectedToEdit(todo) = false;
@@ -94,18 +94,22 @@ export default {
         this.selectTodoToEdit(null);
       } else {
         // delete
-        this.$swal
-          .fire({
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
-            icon: "warning",
-            showCancelButton: true,
-          })
-          .then(async (result) => {
-            if (result.isConfirmed) {
-              this.deleteTodo([todo.id]);
-            }
+        const result = await this.$swal.fire({
+          title: "Are you sure?",
+          text: "You won't be able to revert this!",
+          icon: "warning",
+          showCancelButton: true,
+        });
+        if (result.isConfirmed) {
+          await this.deleteTodo([todo.id]);
+          this.$swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "Done",
+            showConfirmButton: false,
+            timer: 1000,
           });
+        }
       }
     },
   },

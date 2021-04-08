@@ -31,8 +31,7 @@ import { mapActions } from "vuex";
 
 export default {
   name: "TodoInput",
-  mixins: [],
-  data: function() {
+  data() {
     return {
       todoText: "",
       searchText: "",

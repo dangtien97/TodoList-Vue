@@ -74,32 +74,29 @@ export default {
         limit: 10,
       });
     },
-    handleDeleteTodos() {
-      this.$swal
-        .fire({
-          title: "Are you sure?",
-          text: "You won't be able to revert this!",
-          icon: "warning",
-          showCancelButton: true,
-        })
-        .then(async (result) => {
-          if (result.isConfirmed) {
-            await this.deleteTodo(this.getDeletingTodos);
-            this.$swal.fire({
-              position: "top-end",
-              icon: "success",
-              title: "Done",
-              showConfirmButton: false,
-              timer: 1000,
-            });
-            if (this.getTodos.length < 10) {
-              this.$store.dispatch("todo/fetchTodos", {
-                page: 1,
-                limit: 10,
-              });
-            }
-          }
+    async handleDeleteTodos() {
+      const deleteQuestion = await this.$swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+      });
+      if (deleteQuestion.isConfirmed) {
+        await this.deleteTodo(this.getDeletingTodos);
+        this.$swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Done",
+          showConfirmButton: false,
+          timer: 1000,
         });
+        if (this.getTodos.length < 10) {
+          this.$store.dispatch("todo/fetchTodos", {
+            page: 1,
+            limit: 10,
+          });
+        }
+      }
     },
   },
   mounted() {

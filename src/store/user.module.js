@@ -1,6 +1,7 @@
 import UserService from "@/services/user.service";
 
 const SET_USER = "SET_USER";
+const REMOVE_USER = "REMOVE_USER";
 
 const userInLocalStorage = JSON.parse(localStorage.getItem("user"));
 const initialState = userInLocalStorage
@@ -19,15 +20,18 @@ export const user = {
     },
     logout({ commit }) {
       UserService.logout();
-      commit(SET_USER, null);
+      commit(REMOVE_USER);
     },
     async register(_, user) {
       await UserService.register(user);
     },
   },
   mutations: {
-    [SET_USER](state, payload) {
-      state.user = payload;
+    [SET_USER](state, user) {
+      state.user = user;
+    },
+    [REMOVE_USER](state) {
+      state.user = null;
     },
   },
 };
