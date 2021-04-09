@@ -7,14 +7,7 @@ async function login(user) {
     username: user.username,
     password: user.password,
   });
-  if (response.token) {
-    localStorage.setItem("user", JSON.stringify(response));
-  }
   return response;
-}
-
-function logout() {
-  localStorage.removeItem("user");
 }
 
 function register(user) {
@@ -26,7 +19,6 @@ function register(user) {
 
 const UserService = {
   login,
-  logout,
   register,
 };
 

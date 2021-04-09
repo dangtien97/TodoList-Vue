@@ -14,9 +14,9 @@ function getAxiosErrorMessage(error) {
 instance.interceptors.request.use(
   (config) => {
     store.dispatch("loader/sendRequest");
-    const user = localStorage.getItem("user");
+    const user = store.state.user.user;
     if (user) {
-      const token = JSON.parse(user).token;
+      const token = user.token;
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;

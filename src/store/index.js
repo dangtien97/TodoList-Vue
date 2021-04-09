@@ -13,6 +13,10 @@ export default new Vuex.Store({
     user,
     todo,
     loader,
-    plugins: [createPersistedState({ paths: ["user"] })],
   },
+  plugins: [
+    createPersistedState({
+      paths: ["user"],
+    }),
+  ],
 });

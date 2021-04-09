@@ -5,16 +5,17 @@ const REMOVE_USER = "REMOVE_USER";
 
 export const user = {
   namespaced: true,
-  state: { user: {} },
+  state: { user: null },
   getters: { getUser: (state) => state.user },
   actions: {
     async login({ commit }, user) {
       const response = await UserService.login(user);
-      commit(SET_USER, response);
+      if (response.token) {
+        commit(SET_USER, response);
+      }
       return response.data;
     },
     logout({ commit }) {
-      UserService.logout();
       commit(REMOVE_USER);
     },
     async register(_, user) {
