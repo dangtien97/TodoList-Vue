@@ -3,14 +3,9 @@ import UserService from "@/services/user.service";
 const SET_USER = "SET_USER";
 const REMOVE_USER = "REMOVE_USER";
 
-const userInLocalStorage = JSON.parse(localStorage.getItem("user"));
-const initialState = userInLocalStorage
-  ? { user: userInLocalStorage }
-  : { user: null };
-
 export const user = {
   namespaced: true,
-  state: initialState,
+  state: { user: {} },
   getters: { getUser: (state) => state.user },
   actions: {
     async login({ commit }, user) {
