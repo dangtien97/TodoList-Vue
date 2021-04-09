@@ -14,7 +14,7 @@ function getAxiosErrorMessage(error) {
 instance.interceptors.request.use(
   (config) => {
     store.dispatch("loader/sendRequest");
-    const user = store.state.user.user;
+    const user = store.getters["user/getUser"];
     if (user) {
       const token = user.token;
       config.headers.Authorization = `Bearer ${token}`;
