@@ -6,7 +6,7 @@ Vue.use(Router);
 
 const router = new Router({
 	mode: "history",
-	base: "/TodoList-Vue",
+	base: process.env.NODE_ENV === "production" ? "/TodoList-Vue/" : "/",
 	routes: [
 		{
 			path: "/",
